@@ -3,10 +3,21 @@
  */
 var express = require('express');
 var path = require('path');
+var device = require('device');
 
 var app = express();
+
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+    console.log("User agent: " + req.headers['user-agent']);
+    var mydevice = device(req.headers['user-agent']);
+    console.log("Device:");
+    if(mydevice.type == 'desktop') {
+        res.sendFile(path.join(__dirname, 'views', 'index.html'));
+    }
+    else
+    {
+        res.sendFile(path.join(__dirname, 'views', 'mobile_view.html'));
+    }
 })
 
 app.listen(3000, function () {

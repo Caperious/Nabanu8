@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "device": "^0.3.8",
     "express": "^4.14.0",
     "path": "^0.12.7"
   }
