@@ -10,7 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "device": "^0.3.8",
+    "ejs": "^2.5.5",
     "express": "^4.14.0",
-    "path": "^0.12.7"
+    "express-ws": "^2.0.0",
+    "path": "^0.12.7",
+    "randomcolor": "^0.4.4"
   }
 }
