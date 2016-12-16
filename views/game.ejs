@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zajc nč ne dela</title>
+</head>
+<body>
+To je desktop naprava
+ejs view
+
+<ul id="clients"></ul>
+
+
+<script>
+    var ws = new WebSocket("ws://192.168.1.10:3000/server");
+//    ws.onopen = function()
+//    {
+//        // Web Socket is connected, send data using send()
+//        ws.send(JSON.stringify({"initial":"true"}));
+//        document.getElementById("messages").innerHTML+="<br />Connected!";
+//    };
+
+    ws.onmessage = function (evt)
+    {
+        var received_msg = evt.data;
+        data = JSON.parse(received_msg);
+        var ulclients = document.getElementById("clients");
+        if(data.refresh == "true")
+        {
+            var s = "";
+            data.players.forEach(function(player) {
+                s+="<li>"+player.id+"</li>";
+            });
+            ulclients.innerHTML=s;
+        }
+    };
+
+    ws.onclose = function()
+    {
+        // websocket is closed.
+        document.getElementById("messages").innerHTML+="<br />Connection is closed";
+    };
+
+    function refresh()
+    {
+        console.log("Refresham!");
+        ws.send(JSON.stringify({refresh:"true"}));
+    }
+    setInterval(function(){refresh(); }, 3000);
+</script>
+</body>
+</html>

@@ -3,8 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://jsconsole.com/js/remote.js?b51eb34a-9320-47ff-a01b-bde31232da88"></script>
 </head>
 <body>
     To je telefon
+
+    <!--<button id="top">gor</button>-->
+    <button id="right" onclick="sendRight()">desno</button>
+    <!--<button id="down">dol</button>-->
+    <button id="left" onclick="sendLeft()">levo</button>
+
+    <span id="messages">No messages</span>
+
+<script>
+    console.log("Web console working");
+
+    var ws = new WebSocket("ws://192.168.1.10:3000/game");
+    myID = -1;
+    console.log("my id : " + myID);
+    ws.onopen = function()
+    {
+        // Web Socket is connected, send data using send()
+        ws.send(JSON.stringify({"initial":"true"}));
+        document.getElementById("messages").innerHTML+="<br />Connected!";
+    };
+
+    ws.onmessage = function (evt)
+    {
+        var received_msg = evt.data;
+        data = JSON.parse(received_msg);
+        console.log("data:");
+        console.log(data);
+        myID = data.id;
+        console.log(id);
+        document.getElementById("messages").innerHTML+="<br />Recived message: " + received_msg;
+    };
+
+    ws.onclose = function()
+    {
+        // websocket is closed.
+        document.getElementById("messages").innerHTML+="<br />Connection is closed";
+    };
+
+    function sendLeft()
+    {
+        ws.send(JSON.stringify({myID:myID, command:"left"}));
+        console.log("sent left");
+        console.log("my id : " + myID);
+    }
+    function sendRight()
+    {
+        ws.send(JSON.stringify({myID:myID, command:"right"}));
+        console.log("sent right");
+        console.log("my id : " + myID);
+    }
+
+</script>
 </body>
 </html>
