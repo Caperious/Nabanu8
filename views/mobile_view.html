@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://jsconsole.com/js/remote.js?b51eb34a-9320-47ff-a01b-bde31232da88"></script>
+
 </head>
 <body>
+  <div class="test">
+    lala
+  </div>
     To je telefon
 
     <!--<button id="top">gor</button>-->
@@ -18,7 +24,7 @@
 <script>
     console.log("Web console working");
 
-    var ws = new WebSocket("ws://192.168.1.10:3000/game");
+    var ws = new WebSocket("ws://192.168.1.112:3000/game"); //ip
     myID = -1;
     console.log("my id : " + myID);
     ws.onopen = function()
