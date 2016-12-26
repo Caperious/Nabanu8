@@ -8,7 +8,7 @@ var ejs = require('ejs');
 var app = express();
 
 app.set('view engine', 'ejs');
-
+app.use(express.static(__dirname + '/styles'));
 var expressWs = require('express-ws')(app);
 var Game = require('./dieCurve/game_main.js');
 game = new Game('game_canvas',"DieCurve",'1');
