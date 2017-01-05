@@ -1,4 +1,3 @@
-
 #bodyDesktop{
   font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 	font-size: 14px;
@@ -16,22 +15,18 @@
 }
 #bodyMobile{
   font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-	font-size: 8px;
+	font-size: 10px;
 	font-style: normal;
 	font-variant: normal;
   margin: auto;
   background-color: black;
   font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-  font-size: 20px;
+  font-size: 30px;
   font-style: normal;
   font-variant: normal;
   font-weight: 400;
-  line-height: 30px;
+  line-height: 40px;
   color:#95989A;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 p{
   margin:0px 0px 10px 0px;
@@ -44,54 +39,9 @@ p{
   position: absolute;
   /*background-color: pink;*/
 }
-.welcomeContainerMobile{
-  width: 280px;
-  height: 100px;
-  /*top: 0; left: 0; bottom: 400px; right: 0;*/
-  margin: auto;
-  /*position: absolute;*/
-  /*background-color: pink;*/
-}
 .higlight{
   color:#E6E6E6;
 }
 .test{
-  color:blue;
-}
-.tester{
-  visibility: hidden;
-}
-/*NUMPAD*/
-#numpadContainer {
-
-}
-#keyboard {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-#keyboard {
-  float: left;
-  margin: 0 5px 5px 0;
-  width: 60px;
-  height: 60px;
-  font-size: 24px;
-  line-height: 60px;
-  text-align: center;
-  background: #fff;
-  border: 1px solid #f9f9f9;
-  border-radius: 5px;
-}
-.clearl{
-  clear: left;
-}
-.zero{
-  width: 193px !important;
-}
-/*NUMPAD*/
-.code{
-  width: 90%;
-  height: 30px;
-  text-align: center;
-  border-bottom: solid;
+  color:red;
 }

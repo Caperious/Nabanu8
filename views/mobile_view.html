@@ -9,17 +9,47 @@
 
 </head>
 <body>
+  <body id="bodyMobile">
   <div class="test">
-    lala
   </div>
-    To je telefon
 
+<div class="tester">
     <!--<button id="top">gor</button>-->
     <button id="right" onclick="sendRight()">desno</button>
     <!--<button id="down">dol</button>-->
     <button id="left" onclick="sendLeft()">levo</button>
-
     <span id="messages">No messages</span>
+</div>
+<div class="welcomeContainerMobile">
+  <p>Open <span class="higlight">localhost:3000</span> on your desktop and get your code</p>
+</div>
+<p class="code"></p>
+<div id="numpadContainer">
+    <!-- <ul id="keyboard">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li class="clearl">4</li>
+        <li>5</li>
+        <li>6</li>
+        <li class="clearl">7</li>
+        <li>8</li>
+        <li>9</li>
+        <li class="zero clearl">0</li>
+    </ul> -->
+        <button type="button" name="button" id="keyboard">1</button>
+        <button type="button" name="button" id="keyboard">2</button>
+        <button type="button" name="button" id="keyboard">3</button>
+        <button type="button" name="button" id="keyboard" class="clearl">4</button>
+        <button type="button" name="button" id="keyboard">5</button>
+        <button type="button" name="button" id="keyboard">6</button>
+        <button type="button" name="button" id="keyboard" class="clearl">7</button>
+        <button type="button" name="button" id="keyboard">8</button>
+        <button type="button" name="button" id="keyboard">9</button>
+        <button type="button" name="button" id="keyboard" class="clearl zero">0</button>
+</div>
+
+
 
 <script>
     console.log("Web console working");
