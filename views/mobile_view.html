@@ -3,13 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="HandheldFriendly" content="true" />
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://jsconsole.com/js/remote.js?b51eb34a-9320-47ff-a01b-bde31232da88"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <script>
+      document.ontouchmove = function(event){
+        event.preventDefault();
+      }
+      document.addEventListener('gesturestart', function (e) {
+          e.preventDefault();
+      });
+      $(document).ready(function(){
+        $(".number").click(function(){
+            $(".code").append($(this).text());
+        });
+        $(".del").click(function(){
+            $(".code").text($(".code").text().slice(0,-1));
+        });
+        $(".ok").click(function(){
+            alert("ok");
+        })
+      });
+    </script>
 
 </head>
-<body>
-  <body id="bodyMobile">
+
+<body id="bodyMobile">
   <div class="test">
   </div>
 
@@ -25,28 +48,18 @@
 </div>
 <p class="code"></p>
 <div id="numpadContainer">
-    <!-- <ul id="keyboard">
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li class="clearl">4</li>
-        <li>5</li>
-        <li>6</li>
-        <li class="clearl">7</li>
-        <li>8</li>
-        <li>9</li>
-        <li class="zero clearl">0</li>
-    </ul> -->
-        <button type="button" name="button" id="keyboard">1</button>
-        <button type="button" name="button" id="keyboard">2</button>
-        <button type="button" name="button" id="keyboard">3</button>
-        <button type="button" name="button" id="keyboard" class="clearl">4</button>
-        <button type="button" name="button" id="keyboard">5</button>
-        <button type="button" name="button" id="keyboard">6</button>
-        <button type="button" name="button" id="keyboard" class="clearl">7</button>
-        <button type="button" name="button" id="keyboard">8</button>
-        <button type="button" name="button" id="keyboard">9</button>
-        <button type="button" name="button" id="keyboard" class="clearl zero">0</button>
+        <button type="button" name="button" class="keyboard number">1</button>
+        <button type="button" name="button" class="keyboard number">2</button>
+        <button type="button" name="button" class="keyboard number">3</button>
+        <button type="button" name="button" class="keyboard number clearl">4</button>
+        <button type="button" name="button" class="keyboard number">5</button>
+        <button type="button" name="button" class="keyboard number">6</button>
+        <button type="button" name="button" class="keyboard number clearl">7</button>
+        <button type="button" name="button" class="keyboard number">8</button>
+        <button type="button" name="button" class="keyboard number">9</button>
+        <button type="button" name="button" class="keyboard del clearl">DEL</button>
+        <button type="button" name="button" class="keyboard number">0</button>
+        <button type="button" name="button" class="keyboard ok">OK</button>
 </div>
 
 

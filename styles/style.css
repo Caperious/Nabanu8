@@ -45,7 +45,7 @@ p{
   /*background-color: pink;*/
 }
 .welcomeContainerMobile{
-  width: 280px;
+  width: 260px;
   height: 100px;
   /*top: 0; left: 0; bottom: 400px; right: 0;*/
   margin: auto;
@@ -66,11 +66,8 @@ p{
 
 }
 .keyboard {
-  margin: 0;
   padding: 0;
   list-style: none;
-}
-.keyboard {
   float: left;
   margin: 0 5px 5px 0;
   width: 60px;
