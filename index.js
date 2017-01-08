@@ -7,6 +7,38 @@ var device = require('device');
 var ejs = require('ejs');
 var app = express();
 
+var generatedCodes=[];
+
+
+function generateCode()
+{
+
+  var i;
+  var code ="";
+
+  for(i = 0; i < 8; i++)
+  {
+    code = code + Math.floor((Math.random() * 10));
+  }
+  while(isValidCode(code) == false)
+  {
+    for(i = 0; i < 8; i++)
+    {
+      code = code + Math.floor((Math.random() * 10));
+    }
+  }
+  generatedCodes.push(code);
+}
+
+function isValidCode(code)
+{
+  /*
+  while(isValidCode != -1)
+  generatedCodes.append(code);
+  */
+  return generatedCodes.indexOf(code) == -1;
+}
+
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/styles'));
 var expressWs = require('express-ws')(app);
@@ -62,6 +94,7 @@ app.ws('/server', function(ws, req) {
                     }
                 }*/
                 console.log("OK, refresham!");
+
                 ws.send(JSON.stringify({refresh:"true",players : game.getPlayers(), clientCounter : clientCounter}));
             //}
         }
@@ -77,7 +110,7 @@ app.get('/', function (req, res) {
     // console.log("Device:");
     if(mydevice.type == 'desktop') {
         res.sendFile(path.join(__dirname, 'views', 'index.html'));
-        //res.render('game',{clients: clients});
+        //res.render('game'
       //res.sendFile(path.join(__dirname, 'views', 'mobile_view.html'));
     }
     else
