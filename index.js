@@ -114,12 +114,7 @@ app.get('/', function (req, res) {
     // console.log("Device:");
     if(mydevice.type == 'desktop') {
 
-        generateCode();
-        console.log(generatedCodes);
-
-        // res.sendFile(path.join(__dirname, 'views', 'index.html'));
-        res.render('game',{clients: clients});
-      //res.sendFile(path.join(__dirname, 'views', 'mobile_view.html'));
+      res.sendFile(path.join(__dirname, 'views', 'index.html'));
     }
     else
     {
