@@ -65,12 +65,12 @@ p{
 #numpadContainer {
 
 }
-#keyboard {
+.keyboard {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-#keyboard {
+.keyboard {
   float: left;
   margin: 0 5px 5px 0;
   width: 60px;
