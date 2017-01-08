@@ -7,8 +7,10 @@ var device = require('device');
 var ejs = require('ejs');
 var app = express();
 
-var generatedCodes=[];
+//import{session} from './models/session.js';
+var session = require('./models/session.js');
 
+var generatedCodes=[];
 
 function generateCode()
 {
@@ -20,7 +22,7 @@ function generateCode()
   {
     code = code + Math.floor((Math.random() * 10));
   }
-  while(isValidCode(code) == false)
+  while(containsCode(code) == false) // Če že ta ID obstaja se generira nova koda
   {
     for(i = 0; i < 8; i++)
     {
@@ -30,11 +32,10 @@ function generateCode()
   generatedCodes.push(code);
 }
 
-function isValidCode(code)
+function containsCode(code)
 {
   /*
-  while(isValidCode != -1)
-  generatedCodes.append(code);
+    Preverja če že slučajno obstaja ta ID... (malo verjetno ampak vseeno)
   */
   return generatedCodes.indexOf(code) == -1;
 }
@@ -80,7 +81,7 @@ app.ws('/server', function(ws, req) {
     ws.on('message', function(data) { // ko dobimo sporocilo
         data = JSON.parse(data); // sparsamo podatke
         if(data.refresh == "true")
-        {/*
+        {
             if(clients.length > 0)
             {
                 // console.log(game.getPlayers());
@@ -92,25 +93,27 @@ app.ws('/server', function(ws, req) {
                         clients.splice(index,1);
                         clientCounter--;
                     }
-                }*/
+                }
                 console.log("OK, refresham!");
 
                 ws.send(JSON.stringify({refresh:"true",players : game.getPlayers(), clientCounter : clientCounter}));
-            //}
+            }
         }
     });
 });
-app.get('/code', function(req, res){
-  res.render('code',{clients: clients});
-})
+
 
 app.get('/', function (req, res) {
     console.log("User agent: " + req.headers['user-agent']);
     var mydevice = device(req.headers['user-agent']);
     // console.log("Device:");
     if(mydevice.type == 'desktop') {
-        res.sendFile(path.join(__dirname, 'views', 'index.html'));
-        //res.render('game'
+
+        generateCode();
+        console.log(generatedCodes);
+
+        // res.sendFile(path.join(__dirname, 'views', 'index.html'));
+        res.render('game',{clients: clients});
       //res.sendFile(path.join(__dirname, 'views', 'mobile_view.html'));
     }
     else
@@ -118,6 +121,8 @@ app.get('/', function (req, res) {
         res.sendFile(path.join(__dirname, 'views', 'mobile_view.html'));
     }
 })
+
+
 
 app.listen(3000, function () {
     console.log('Example app listening on port 3000!')
