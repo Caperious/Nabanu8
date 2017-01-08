@@ -101,7 +101,8 @@ app.ws('/server', function(ws, req) {
     });
 });
 app.get('/code', function(req, res){
-  res.render('code',{clients: clients});
+  generateCode();
+  res.render('code',{clients: clients, code:generatedCodes[generatedCodes.length -1 ]});
 })
 
 app.get('/', function (req, res) {
