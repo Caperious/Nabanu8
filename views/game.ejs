@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Zajc nč ne dela</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 </head>
 <body>
@@ -14,7 +15,17 @@ ejs view
 
 
 <script>
-    var ws = new WebSocket("ws://212.235.177.179:3000/server");
+
+    var url;
+    $(function() {
+      url = window.location.href;
+      var res = url.split("/");
+      url = "/"+res[1]+"/"+res[2]+"/";
+
+
+    })
+
+    var ws = new WebSocket("ws:"+url+"server");
 //    ws.onopen = function()
 //    {
 //        // Web Socket is connected, send data using send()
