@@ -19,16 +19,20 @@ app.ws('/game', function(ws, req) {
         data = JSON.parse(data); // sparsamo podatke
         if(data.initial == "true") // ce je to prvo sporocilo od nekoga ga shranimo v array clientov
         {
+            console.log(data);
             clients[clientCounter] = {};
             clients[clientCounter].ws = ws; //shranimo vse povezave do serverja
-            clients[clientCounter].lastActive= new Date().getTime() / 1000;
+            clients[clientCounter].lastActive= new Date().getTime() / 100000;
             game.addPlayer(clientCounter); // dodamo igralca, pozneje potrebno dodat izbiranje igre ce je igralec prvi v tej seji
             ws.send(JSON.stringify({id:clientCounter})); // ter mu posljemo id, da ob naslednjem sporocilu vemo kdo posilja
             clientCounter++; // idji clientov
+            //console.log(data.myID+" "+data.command);
+            //console.log(ws);
         }
         else
         {
-            clients[data.myID].lastActive = 0;
+            console.log(data.myID+" "+data.command);
+            //clients[0].lastActive = 0;
             if(data.command == "left")
                 game.sendCmdToPlayer("left",data.myID);
             else if(data.command == "right")
@@ -44,21 +48,22 @@ app.ws('/server', function(ws, req) {
     ws.on('message', function(data) { // ko dobimo sporocilo
         data = JSON.parse(data); // sparsamo podatke
         if(data.refresh == "true")
-        {
+        {/*
             if(clients.length > 0)
             {
                 // console.log(game.getPlayers());
                 for (index = 0; index < clients.length; ++index) {
-                    console.log("Player : "+ index +" has been inactive for :"+((new Date().getTime() / 1000) - clients[index].lastActive));
+                    //console.log("Player : "+ index +" has been inactive for :"+((new Date().getTime() / 1000) - clients[index].lastActive));
                     if((new Date().getTime() / 1000) - clients[index].lastActive  > 10){
 
                         game.removePlayer(index);
                         clients.splice(index,1);
+                        clientCounter--;
                     }
-                }
+                }*/
                 console.log("OK, refresham!");
                 ws.send(JSON.stringify({refresh:"true",players : game.getPlayers(), clientCounter : clientCounter}));
-            }
+            //}
         }
     });
 });
@@ -71,6 +76,7 @@ app.get('/', function (req, res) {
     if(mydevice.type == 'desktop') {
         // res.sendFile(path.join(__dirname, 'views', 'index.html'));
         res.render('game',{clients: clients});
+      //res.sendFile(path.join(__dirname, 'views', 'mobile_view.html'));
     }
     else
     {
