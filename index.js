@@ -102,6 +102,11 @@ app.ws('/server', function(ws, req) {
     });
 });
 
+app.get('/code', function(req, res){
+  generateCode();
+  res.render('code',{clients: clients, code:generatedCodes[generatedCodes.length -1 ]});
+})
+
 
 app.get('/', function (req, res) {
     console.log("User agent: " + req.headers['user-agent']);

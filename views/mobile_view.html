@@ -66,8 +66,14 @@
 <script>
     console.log("Web console working");
 
+    var url;
+    $(function() {
+      url = window.location.href;
+      var res = url.split("/");
+      url = "/"+res[1]+"/"+res[2]+"/";
+    })
 
-    var ws = new WebSocket("ws://212.235.177.179:3000/game"); //ip
+    var ws = new WebSocket("ws:"+url+"game"); //ip
     myID = -1;
     console.log("my id : " + myID);
     ws.onopen = function()
