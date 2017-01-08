@@ -100,19 +100,17 @@ app.ws('/server', function(ws, req) {
         }
     });
 });
-
+app.get('/code', function(req, res){
+  res.render('code',{clients: clients});
+})
 
 app.get('/', function (req, res) {
     console.log("User agent: " + req.headers['user-agent']);
     var mydevice = device(req.headers['user-agent']);
     // console.log("Device:");
     if(mydevice.type == 'desktop') {
-
-        //var code = generateCode();
-        generateCode();
-        console.log(generatedCodes);
-        // res.sendFile(path.join(__dirname, 'views', 'index.html'));
-        res.render('game',{clients: clients});
+        res.sendFile(path.join(__dirname, 'views', 'index.html'));
+        //res.render('game'
       //res.sendFile(path.join(__dirname, 'views', 'mobile_view.html'));
     }
     else
