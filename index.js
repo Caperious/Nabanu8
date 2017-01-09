@@ -17,7 +17,7 @@ var generatedCodes = [];
 var activeSessions = [];
 var view_host;
 function generateCode() {
-    console.log(hostClient);
+    // console.log(hostClient);
     var i;
     var code = "";
 
@@ -58,27 +58,26 @@ app.ws('/game', function (ws, req) {
         data = JSON.parse(data); // sparsamo podatke
         if (data.initial == "true") // ce je to prvo sporocilo od nekoga ga shranimo v array clientov
         {
-            clients[clientCounter] = {};
-            clients[clientCounter].ws = ws; //shranimo vse povezave do serverja
-            clients[clientCounter].lastActive = new Date().getTime() / 100000;
-            game.addPlayer(clientCounter); // dodamo igralca, pozneje potrebno dodat izbiranje igre ce je igralec prvi v tej seji
-            ws.send(JSON.stringify({id: clientCounter})); // ter mu posljemo id, da ob naslednjem sporocilu vemo kdo posilja
-            clientCounter++; // idji clientov
+            // clients[clientCounter] = {};
+            // clients[clientCounter].ws = ws; //shranimo vse povezave do serverja
+            // clients[clientCounter].lastActive = new Date().getTime() / 100000;
+            // game.addPlayer(clientCounter); // dodamo igralca, pozneje potrebno dodat izbiranje igre ce je igralec prvi v tej seji
+            // ws.send(JSON.stringify({id: clientCounter})); // ter mu posljemo id, da ob naslednjem sporocilu vemo kdo posilja
+            // clientCounter++; // idji clientov
             //console.log(data.myID+" "+data.command);
             //console.log(ws);
         }
-        else {
-
-            clients[data.myID].lastActive = 0;
-            if (data.command == "left")
-                game.sendCmdToPlayer("left", data.myID);
-            else if (data.command == "right")
-                game.sendCmdToPlayer("right", data.myID);
-            else
-                console.log("WE HAVE A HACKERMAN!");
-        }
-
-
+        //Ne spada sem
+        // else {
+        //
+        //     clients[data.myID].lastActive = 0;
+        //     if (data.command == "left")
+        //         game.sendCmdToPlayer("left", data.myID);
+        //     else if (data.command == "right")
+        //         game.sendCmdToPlayer("right", data.myID);
+        //     else
+        //         console.log("WE HAVE A HACKERMAN!");
+        // }
         if (containsCode(data.command)) {
             console.log("Failed");
         }
@@ -89,16 +88,22 @@ app.ws('/game', function (ws, req) {
                 //console.log(activeSessions[i].getIdRoom());
                 if (activeSessions[i].getIdRoom() == data.command) {
                     //console.log("Isti je");
-                    attachClient = shortid.generate();
+                    client = {};
+                    client.id = shortid.generate();
+                    client.ip = ws._socket.remoteAddress;
+                    // ipList[client.id] = client.ip;
+                    client.ws = ws;
                     // dodaj clienta v ta Game room
                     if (activeSessions[i].getNumberOfClients() == 0) {
-                        activeSessions[i].addClient(attachClient);
-                        activeSessions[i].setAdmin(attachClient);
+                        activeSessions[i].addClient(client.id);
+                        activeSessions[i].setAdmin(client.id);
                         // console.log(activeSessions);
                         activeSessions[i].hostWS.send(JSON.stringify({type: "url", url: "http://"+serverHostname+":3000/gameRoom"}));
+                        ws.send(JSON.stringify({type:"url", url:"http://"+serverHostname+':3000/admin_controls_view'}));
                         break;
                     }
-                    activeSessions[i].addClient(attachClient);
+                    activeSessions[i].addClient(client.id);
+                    ws.send(JSON.stringify({type:"msg", msg: "Uspešno ste se prijavili v skupino. Prosimo počakajte da admin izbere igro"}));
                     break;
                 }
             }
@@ -149,8 +154,13 @@ function loopGame() {
 }
 
 app.get('/gameRoom/:idRoom',function(req,res){
-    console.log(req.params.idRoom);
+    // console.log(req.params.idRoom);
+    // Poiščeš session s tem req.params.idRoom v actieveSessions
     res.render('gameRoom');
+});
+
+app.get('/admin_controls_view',function(req,res){
+    res.sendFile(path.join(__dirname, 'views', 'admin_controls_view.html'));
 });
 
 app.get('/', function (req, res) {
@@ -165,7 +175,7 @@ app.get('/', function (req, res) {
 
     else
     {
-        res.sendFile(path.join(__dirname, 'views', 'curve_controler.html'));
+        res.sendFile(path.join(__dirname, 'views', 'mobile_view.html'));
     }
 })
 
