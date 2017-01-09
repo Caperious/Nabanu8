@@ -35,3 +35,9 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+.idea/modules.xml
+.idea/Nabnu8.iml
+.idea/vcs.xml
+.idea/workspace.xml
+dieCurve/game_area.js
