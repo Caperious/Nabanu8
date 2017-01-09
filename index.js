@@ -8,9 +8,12 @@ var ejs = require('ejs');
 var app = express();
 
 //import{session} from './models/session.js';
-var session = require('./models/session.js');
+var Session = require('./models/session.js');
+//var session = new Session(1,false,null,null);
+var shortid = require('shortid');
 
 var generatedCodes=[];
+var activeSessions = [];
 
 function generateCode()
 {
@@ -30,6 +33,9 @@ function generateCode()
     }
   }
   generatedCodes.push(code);
+  var session = new Session(code,false,null,null);
+  activeSessions.push(session);
+
 }
 
 function containsCode(code)
@@ -45,6 +51,8 @@ app.use(express.static(__dirname + '/styles'));
 var expressWs = require('express-ws')(app);
 var Game = require('./dieCurve/game_main.js');
 game = new Game('game_canvas',"DieCurve",'1');
+
+
 var clientCounter = 0;
 var clients = [];
 app.ws('/game', function(ws, req) {
@@ -53,6 +61,7 @@ app.ws('/game', function(ws, req) {
         if(data.initial == "true") // ce je to prvo sporocilo od nekoga ga shranimo v array clientov
         {
             console.log(data);
+            //console.log(session);
             clients[clientCounter] = {};
             clients[clientCounter].ws = ws; //shranimo vse povezave do serverja
             clients[clientCounter].lastActive= new Date().getTime() / 100000;
@@ -65,6 +74,37 @@ app.ws('/game', function(ws, req) {
         else
         {
             console.log(data.myID+" "+data.command);
+
+            if(containsCode(data.command))
+            {
+              console.log("Failed");
+            }
+            else
+            {
+              var attachClient // spremenljivka za dodajanje clienta v session
+
+              for(var i = 0; i < activeSessions.length; i++)
+              {
+                //console.log(activeSessions[i].getIdRoom());
+                if(activeSessions[i].getIdRoom() == data.command)
+                {
+                  //console.log("Isti je");
+                  attachClient = shortid.generate();
+                  // dodaj clienta v ta Game room
+                  if(activeSessions[i].getNumberOfClients() == 0)
+                  {
+                    activeSessions[i].addClient(attachClient);
+                    activeSessions[i].setAdmin(attachClient);
+                    break;
+                  }
+                  activeSessions[i].addClient(attachClient);
+                  break;
+                }
+              }
+              console.log(activeSessions);
+              //console.log("Success");
+            }
+
             //clients[0].lastActive = 0;
             if(data.command == "left")
                 game.sendCmdToPlayer("left",data.myID);
