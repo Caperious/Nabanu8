@@ -15,6 +15,7 @@
   color:#95989A;
 }
 #bodyMobile{
+  /*dissable selecting*/
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Chrome/Safari/Opera */
      -khtml-user-select: none; /* Konqueror */
