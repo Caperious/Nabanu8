@@ -17,10 +17,28 @@
   </body>
 </html>
 <script>
-  $(function() {
-    document.getElementById("code").innerHTML=<%- code %>;
+    var ws = new WebSocket("ws://"+window.location.host+"/server");
+    var idRoom = -1;
+    $(function() {
+    <!--document.getElementById("code").innerHTML-->
     document.getElementById("ipAddress").innerHTML="http://"+window.location.host;
+    ws.send(JSON.stringify({"action":"generate_code"}));
 
+    ws.onmessage = function (evt)
+        {
+            var received_msg = evt.data;
+            data = JSON.parse(received_msg);
+            if(data.type== "code")
+            {
+                document.getElementById("code").innerHTML=data.code;
+                idRoom = data.idRoom;
+            }
+            else if(data.type=="url")
+            {
+                if(idRoom != -1)
+                window.location = data.url+'/'+idRoom;
+            }
+        };
   })
-
+//windows.location.reload("url")
 </script>
