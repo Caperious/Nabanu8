@@ -162,8 +162,10 @@ app.get('/', function (req, res) {
 
         res.render('code');
     }
-    else {
-        res.sendFile(path.join(__dirname, 'views', 'mobile_view.html'));
+
+    else
+    {
+        res.sendFile(path.join(__dirname, 'views', 'curve_controler.html'));
     }
 })
 
