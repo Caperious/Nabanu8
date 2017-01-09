@@ -11,12 +11,21 @@
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
 
-<body id="lala">
+<body>
 
   <div class="buttonContainer">
-    <button id="left"  class="fa fa-chevron-left fa-4x" aria-hidden="true"></button>
-    <button id="right"  class="fa fa-chevron-right fa-4x" aria-hidden="true"></button>
+    <!-- <button id="left"  class="fa fa-chevron-left fa-4x" aria-hidden="true"></button> -->
+    <!-- <button id="right"  class="fa fa-chevron-right fa-4x" aria-hidden="true"></button> -->
+    <span id="left" class="fa-stack fa-lg" aria-hidden="true">
+      <i  class="fa fa-circle-thin  fa-stack-2x"></i>
+      <i id="ar-left" class="fa fa-chevron-left fa-stack-1x"></i>
+    </span>
+    <span id="right" class="fa-stack fa-lg" aria-hidden="true">
+      <i class="fa fa-circle-thin  fa-stack-2x"></i>
+      <i id="ar-right" class="fa fa-chevron-right fa-stack-1x"></i>
+    </span>
   </div>
+
   <div class="tester">
       <span id="messages">No messages</span>
   </div>
