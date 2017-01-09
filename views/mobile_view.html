@@ -9,27 +9,6 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://jsconsole.com/js/remote.js?68e1ba6c-adb3-4ade-85d1-51d5bba28145"></script>
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-
-    <script>
-      document.ontouchmove = function(event){
-        event.preventDefault();
-      }
-      document.addEventListener('gesturestart', function (e) {
-          e.preventDefault();
-      });
-      $(document).ready(function(){
-        $(".number").click(function(){
-            $(".code").append($(this).text());
-        });
-        $(".del").click(function(){
-            $(".code").text($(".code").text().slice(0,-1));
-        });
-        $(".ok").click(function(){
-            alert("ok");
-        })
-      });
-    </script>
-
 </head>
 
 <body id="bodyMobile">
@@ -44,7 +23,7 @@
     <span id="messages">No messages</span>
 </div>
 <div class="welcomeContainerMobile">
-  <p>Open <span class="higlight">localhost:3000</span> on your desktop and get your code</p>
+  <p>Open <span class="higlight"></span> on your desktop and get your code</p>
 </div>
 <p class="code"></p>
 <div id="numpadContainer">
@@ -62,9 +41,8 @@
         <button type="button" name="button" class="keyboard ok">OK</button>
 </div>
 
-
-
 <script>
+
     // Press and hold gumba
 
     $('#right').on('touchstart', function (ev) {
@@ -88,7 +66,31 @@
     // Press and hold gumba - Konec
 
 
-    var ws = new WebSocket("ws://10.42.0.247:3000/game"); //ip
+//  var ws = new WebSocket("ws://10.42.0.247:3000/game"); //ip
+    var ws = new WebSocket("ws://"+ window.location.host+"/game"); //ip
+
+    // Ostane v mobile view
+    document.ontouchmove = function(event){
+      event.preventDefault();
+    }
+    document.addEventListener('gesturestart', function (e) {
+        e.preventDefault();
+    });
+    $(document).ready(function(){
+      $(".higlight").text( window.location.host);
+      $(".number").click(function(){
+          $(".code").append($(this).text());
+      });
+      $(".del").click(function(){
+          $(".code").text($(".code").text().slice(0,-1));
+      });
+      $(".ok").click(function(){
+         sendCode($(".code").text())
+      })
+    });
+
+
+    // Gre v dieCurve_view
     myID = -1;
     console.log("my id : " + myID);
     ws.onopen = function()
@@ -105,7 +107,7 @@
         console.log("data:");
         console.log(data);
         myID = data.id;
-        console.log(id);
+        //console.log(id);
         document.getElementById("messages").innerHTML+="<br />Recived message: " + received_msg;
     };
 
@@ -115,6 +117,11 @@
         document.getElementById("messages").innerHTML+="<br />Connection is closed";
     };
 
+    function sendCode(code){
+      //console.log(code);
+      //alert(code);
+      ws.send(JSON.stringify({myID:myID, command:code}));
+    }
     function sendLeft()
     {
         ws.send(JSON.stringify({myID:myID, command:"left"}));

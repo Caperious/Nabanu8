@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nabanu8</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+</head>
+  <body id="bodyDesktop">
+    <div class="welcomeContainer">
+      <p>Open <span id="ipAddress" class="higlight">[your ip address]</span> on your smartphone</p>
+      <p>and enter this code: <span id="code" class="higlight">[ data ]</span>
+    </div>
+
+  </body>
+</html>
+<script>
+  $(function() {
+    document.getElementById("code").innerHTML=<%- code %>;
+    document.getElementById("ipAddress").innerHTML="http://"+window.location.host;
+
+  })
+
+</script>
