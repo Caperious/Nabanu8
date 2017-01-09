@@ -24,7 +24,7 @@ Session.prototype = {
     },
 
     getClients: function () {
-        return this.players;
+        return this.clients;
     },
 
     getNumberOfClients: function()

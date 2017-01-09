@@ -51,12 +51,14 @@ app.use(express.static(__dirname + '/styles'));
 var expressWs = require('express-ws')(app);
 var Game = require('./dieCurve/game_main.js');
 game = new Game('game_canvas',"DieCurve",'1');
+var isAdmin = "false";
 
 
 var clientCounter = 0;
 var clients = [];
 app.ws('/game', function(ws, req) {
     ws.on('message', function(data) { // ko dobimo porocilo
+
         data = JSON.parse(data); // sparsamo podatke
         if(data.initial == "true") // ce je to prvo sporocilo od nekoga ga shranimo v array clientov
         {
@@ -74,17 +76,17 @@ app.ws('/game', function(ws, req) {
         else
         {
             console.log(data.myID+" "+data.command);
-
-            if(containsCode(data.command))
+            if(containsCode(data.command) == true)
             {
               console.log("Failed");
             }
             else
             {
-              var attachClient // spremenljivka za dodajanje clienta v session
+              var attachClient="" // spremenljivka za dodajanje clienta v session
 
               for(var i = 0; i < activeSessions.length; i++)
               {
+
                 //console.log(activeSessions[i].getIdRoom());
                 if(activeSessions[i].getIdRoom() == data.command)
                 {
@@ -95,6 +97,7 @@ app.ws('/game', function(ws, req) {
                   {
                     activeSessions[i].addClient(attachClient);
                     activeSessions[i].setAdmin(attachClient);
+                    isAdmin = "true";
                     break;
                   }
                   activeSessions[i].addClient(attachClient);
@@ -102,6 +105,8 @@ app.ws('/game', function(ws, req) {
                 }
               }
               console.log(activeSessions);
+              ws.send(JSON.stringify({activeSection:activeSessions[i],idClient:attachClient}));
+              //res.render('game',{clients: clients});
               //console.log("Success");
             }
 
@@ -147,6 +152,9 @@ app.get('/code', function(req, res){
   res.render('code',{clients: clients, code:generatedCodes[generatedCodes.length -1 ]});
 })
 
+app.get('/gameRoom', function(req, res){
+  res.render('gameRoom',{clients: clients});
+})
 
 app.get('/', function (req, res) {
     console.log("User agent: " + req.headers['user-agent']);
@@ -154,7 +162,9 @@ app.get('/', function (req, res) {
     // console.log("Device:");
     if(mydevice.type == 'desktop') {
 
+      //res.sendFile(path.join(__dirname, 'views', 'index.html'));
       res.sendFile(path.join(__dirname, 'views', 'index.html'));
+
     }
     else
     {

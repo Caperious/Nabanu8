@@ -18,6 +18,7 @@ ejs view
 
 
     var ws = new WebSocket("ws://"+window.location.host+"/server");
+
 //    ws.onopen = function()
 //    {
 //        // Web Socket is connected, send data using send()
@@ -38,6 +39,7 @@ ejs view
             });
             ulclients.innerHTML=s;
         }
+        
     };
 
     ws.onclose = function()
