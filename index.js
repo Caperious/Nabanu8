@@ -55,13 +55,12 @@ game = new Game('game_canvas',"DieCurve",'1');
 
 var clientCounter = 0;
 var clients = [];
+var hostClient = {};
 app.ws('/game', function(ws, req) {
     ws.on('message', function(data) { // ko dobimo porocilo
         data = JSON.parse(data); // sparsamo podatke
         if(data.initial == "true") // ce je to prvo sporocilo od nekoga ga shranimo v array clientov
         {
-            console.log(data);
-            //console.log(session);
             clients[clientCounter] = {};
             clients[clientCounter].ws = ws; //shranimo vse povezave do serverja
             clients[clientCounter].lastActive= new Date().getTime() / 100000;
@@ -73,7 +72,16 @@ app.ws('/game', function(ws, req) {
         }
         else
         {
-            console.log(data.myID+" "+data.command);
+            if (typeof clients[data.myID] !== 'undefined') {
+                clients[data.myID].lastActive = 0;
+                if(data.command == "left")
+                    game.sendCmdToPlayer("left",data.myID);
+                else if(data.command == "right")
+                    game.sendCmdToPlayer("right",data.myID);
+                else
+                    console.log("WE HAVE A HACKERMAN!");
+            }
+
 
             if(containsCode(data.command))
             {
@@ -111,41 +119,61 @@ app.ws('/game', function(ws, req) {
             else if(data.command == "right")
                 game.sendCmdToPlayer("right",data.myID);
             else
-                "WE HAVE A HACKERMAN!";
+            {
+                console.log("Client was inactive for too long.");
+                console.log(clients);
+            }
         }
 
     })
 });
 
 app.ws('/server', function(ws, req) {
+    console.log("Host has connected! ");
+    hostClient = ws;
+    setInterval(loopGame, 50);
+    // setTimeout(loopGame,500);
     ws.on('message', function(data) { // ko dobimo sporocilo
         data = JSON.parse(data); // sparsamo podatke
-        if(data.refresh == "true")
-        {
-            if(clients.length > 0)
-            {
-                // console.log(game.getPlayers());
-                for (index = 0; index < clients.length; ++index) {
-                    //console.log("Player : "+ index +" has been inactive for :"+((new Date().getTime() / 1000) - clients[index].lastActive));
-                    if((new Date().getTime() / 1000) - clients[index].lastActive  > 10){
-
-                        game.removePlayer(index);
-                        clients.splice(index,1);
-                        clientCounter--;
-                    }
-                }
-                console.log("OK, refresham!");
-
-                ws.send(JSON.stringify({refresh:"true",players : game.getPlayers(), clientCounter : clientCounter}));
-            }
-        }
+        // if(data.refresh == "true")
+        // {
+        //     if(clients.length > 0)
+        //     {
+        //         // console.log(game.getPlayers());
+        //         for (index = 0; index < clients.length; ++index) {
+        //             console.log(clients);
+        //             console.log("Length : " + clients.length);
+        //             console.log("index: " + index);
+        //             console.log("Player : "+ index +" has been inactive for :"+((new Date().getTime() / 1000) - clients[index].lastActive));
+        //             if((new Date().getTime() / 1000) - clients[index].lastActive  > 10){
+        //
+        //                 game.removePlayer(index);
+        //                 clients.splice(index,1);
+        //                 // clients.length = clients.length -1; // Ker splice ni metoda arraya ne vpliva na njegovo dolzino, in jo je treba spremenit posebej
+        //             }
+        //         }
+        //         console.log("OK, refresham!");
+        //         ws.send(JSON.stringify({refresh:"true",players : game.getPlayers(), clientCounter : clientCounter}));
+        //     }
+        // }
     });
+    // setTimeout(loopGame,500);
+
 });
+
+
+function loopGame()
+{
+    console.log("Sending data!");
+    // console.log(hostClient);
+    game.updatePlayers();
+    hostClient.send(JSON.stringify({"type" : "gameinfo", "game" : game}));
+}
 
 app.get('/code', function(req, res){
   generateCode();
   res.render('code',{clients: clients, code:generatedCodes[generatedCodes.length -1 ]});
-})
+});
 
 
 app.get('/', function (req, res) {
