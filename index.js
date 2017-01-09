@@ -186,7 +186,7 @@ app.get('/', function (req, res) {
     }
     else
     {
-        res.sendFile(path.join(__dirname, 'views', 'mobile_view.html'));
+        res.sendFile(path.join(__dirname, 'views', 'curve_controler.html'));
     }
 })
 

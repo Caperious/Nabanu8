@@ -54,11 +54,11 @@ p{
 }
 .welcomeContainerMobile{
   width: 260px;
-  height: 100px;
+  height: ;
   /*top: 0; left: 0; bottom: 400px; right: 0;*/
   margin: auto;
   /*position: absolute;*/
-  /*background-color: pink;*/
+  background-color: pink;
 }
 .higlight{
   color:#E6E6E6;
@@ -75,7 +75,7 @@ p{
 }
 
 .keyboard {
-
+  /*visibility: hidden;*/
   padding: 0;
   list-style: none;
 
@@ -113,4 +113,8 @@ p{
   box-shadow: 0 8px 16px 0 rgba(f,f,f,f), 0 6px 20px 0 rgba(f,f,f,f);
   background-color: #4CAF50;
   border-radius: 50%;
+}
+.controllerContainer{
+  background-color: pink;
+  margin: auto;
 }
