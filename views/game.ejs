@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>Zajc nč ne dela</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
 </head>
 <body>
 <p class="test">To je desktop naprava</p>
@@ -13,17 +13,10 @@ ejs view
 
 <ul id="clients"></ul>
 
-
+<canvas id="game_area" width="900" height="900"></canvas>
 <script>
 
-    var url;
-    $(function() {
-      url = window.location.href;
-      var res = url.split("/");
-      url = "/"+res[1]+"/"+res[2]+"/";
-    })
-
-    var ws = new WebSocket("ws:"+url+"server");
+    var ws = new WebSocket("ws://"+window.location.host+"/server");
 //    ws.onopen = function()
 //    {
 //        // Web Socket is connected, send data using send()
@@ -35,6 +28,7 @@ ejs view
     {
         var received_msg = evt.data;
         data = JSON.parse(received_msg);
+//        console.log(data);
         var ulclients = document.getElementById("clients");
         if(data.refresh == "true")
         {
@@ -44,6 +38,15 @@ ejs view
             });
             ulclients.innerHTML=s;
         }
+        if(data.type=="gameinfo")
+        {
+//            console.log("izpisujem gameinfo: ");
+            console.log(data.game);
+            data.game.players.forEach(function(player)
+            {
+               paint(player.cX_old,player.cY_old, player.cX, player.cY,player.color);
+            });
+        }
     };
 
     ws.onclose = function()
@@ -52,12 +55,47 @@ ejs view
         document.getElementById("messages").innerHTML+="<br />Connection is closed";
     };
 
-    function refresh()
+//    function refresh()
+//    {
+//        console.log("Refresham!");
+//        ws.send(JSON.stringify({refresh:"true"}));
+//    }
+//    setInterval(function(){refresh(); }, 3000);
+</script>
+
+<script>
+    area = $("#game_area")[0].getContext('2d');
+    function movePlayer(PlayerID, direction)
+    {}
+    function runGame()
     {
-        console.log("Refresham!");
-        ws.send(JSON.stringify({refresh:"true"}));
+
+//        window.setInterval(function() {
+//            movePlayer(1,90)
+//        },500)
     }
-    setInterval(function(){refresh(); }, 3000);
+
+    function paint(cxo,cyo,cx,cy,color)
+    {
+        area.strokeStyle = color;
+        area.fillStyle = color;
+        area.beginPath();
+        area.lineWidth=10;
+//        area.strokeStyle="green"; // Green path
+        area.moveTo(cxo,cyo);
+        area.lineTo(cx,cy);
+        area.stroke();
+//        this.drawingContext.strokeStyle = player.color;
+//        this.drawingContext.fillStyle = player.color;
+//        this.drawingContext.beginPath();
+//        this.drawingContext.lineWidth = Config.lineWidth;
+//        this.drawingContext.moveTo(player.x, player.y);
+//        this.drawingContext.lineTo(player.x + deltaX, player.y + deltaY);
+//        this.drawingContext.stroke();
+    }
+    paint();
+
+//    function drawLine(playerID, coordinates)
 </script>
 </body>
 </html>
