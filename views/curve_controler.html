@@ -13,15 +13,10 @@
 
 <body id="lala">
 
-  <div class="button">
-    <!--<button id="top">gor</button>-->
-    <button id="leftt"  class="fa fa-chevron-left fa-5x" aria-hidden="true"></button>
-    <!--<button id="down">dol</button>-->
-    <button id="right"  class="fa fa-chevron-right fa-5x" aria-hidden="true"></button>
-    <!-- <i class="fa fa-chevron-left fa-5x" aria-hidden="true"></i> -->
+  <div class="buttonContainer">
+    <button id="left"  class="fa fa-chevron-left fa-4x" aria-hidden="true"></button>
+    <button id="right"  class="fa fa-chevron-right fa-4x" aria-hidden="true"></button>
   </div>
-
-
   <div class="tester">
       <span id="messages">No messages</span>
   </div>
@@ -29,23 +24,23 @@
 
 <script>
     //prevents doule tap to zoom on iphone
-    (function($) {
-      $.fn.nodoubletapzoom = function() {
-      $(this).bind('touchstart', function preventZoom(e){
-          var t2 = e.timeStamp;
-          var t1 = $(this).data('lastTouch') || t2;
-          var dt = t2 - t1;
-          var fingers = e.originalEvent.touches.length;
-          $(this).data('lastTouch', t2);
-          if (!dt || dt > 500 || fingers > 1){
-              return; // not double-tap
-          }
-          e.preventDefault(); // double tap - prevent the zoom
-          // also synthesize click events we just swallowed up
-          $(e.target).trigger('click');
-      });};
-    })(jQuery);
-    $("body").nodoubletapzoom();
+    // (function($) {
+    //   $.fn.nodoubletapzoom = function() {
+    //   $(this).bind('touchstart', function preventZoom(e){
+    //       var t2 = e.timeStamp;
+    //       var t1 = $(this).data('lastTouch') || t2;
+    //       var dt = t2 - t1;
+    //       var fingers = e.originalEvent.touches.length;
+    //       $(this).data('lastTouch', t2);
+    //       if (!dt || dt > 500 || fingers > 1){
+    //           return; // not double-tap
+    //       }
+    //       e.preventDefault(); // double tap - prevent the zoom
+    //       // also synthesize click events we just swallowed up
+    //       $(e.target).trigger('click');
+    //   });};
+    // })(jQuery);
+    // $("body").nodoubletapzoom();
 
     //prevents scrolling on ios
     document.ontouchmove = function(event){
@@ -102,6 +97,7 @@
     }
 
     $('#right').on('touchstart', function (ev) {
+        $("#testek").text("right");
         timerRight = setInterval(sendRight, 50); // 250ms interval
         return false;
     });
@@ -111,6 +107,7 @@
     });
 
     $('#left').on('touchstart', function (ev) {
+        $("#testek").text("left");
         timerLeft = setInterval(sendLeft, 50); // 250ms interval
         return false;
     });

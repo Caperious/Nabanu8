@@ -5,7 +5,8 @@ html, body{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /*background: black;*/
+  background: black;
+
   /*dissable selecting*/
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Chrome/Safari/Opera */
@@ -14,14 +15,38 @@ html, body{
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   not supported by any browser */
+
 }
 .tester{
   visibility: hidden;
 }
 .buttonContainer{
   display: inline-block;
-  background-color: red;
+  margin:0px auto;
+  /*overflow: auto;*/
+  white-space: nowrap;
+  width: 90%;
 }
 button{
-  border: none;
+  color: white;
+  border: white solid 1px;
+  border-radius: 180px;
+  width: auto;
+  padding: 10px 20px;
+  /*background-color: pink;*/
 }
+
+button:active{
+  color: red;
+  border: red solid 1px;
+}
+
+#left{
+  float:left;
+}
+#right{
+  float: right;
+}
+/*.fa-circle{
+  color: red;
+}*/
