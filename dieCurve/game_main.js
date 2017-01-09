@@ -34,11 +34,16 @@ dieCurve.prototype = {
         this.players = this.players.filter(function(obj) {
             return id === -1;
         });
+    },
+    updatePlayers: function() {
+        this.players.forEach(function(player){
+            player.updateCoordinates();
+        });
     }
 };
 module.exports = dieCurve;
 
 function random(min,max)
 {
-    return Math.random() * (min - max) + min;
+    return Math.random() * (max - min) + min;
 }

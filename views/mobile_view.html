@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="HandheldFriendly" content="true" />
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://jsconsole.com/js/remote.js?b51eb34a-9320-47ff-a01b-bde31232da88"></script>
+    <script src="https://jsconsole.com/js/remote.js?68e1ba6c-adb3-4ade-85d1-51d5bba28145"></script>
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
     <script>
@@ -38,9 +38,9 @@
 
 <div class="tester">
     <!--<button id="top">gor</button>-->
-    <button id="right" onclick="sendRight()">desno</button>
+    <button id="left" >levo</button>
     <!--<button id="down">dol</button>-->
-    <button id="left" onclick="sendLeft()">levo</button>
+    <button id="right">desno</button>
     <span id="messages">No messages</span>
 </div>
 <div class="welcomeContainerMobile">
@@ -65,9 +65,30 @@
 
 
 <script>
-    console.log("Web console working");
+    // Press and hold gumba
 
-    var ws = new WebSocket("ws://192.168.1.112:3000/game"); //ip
+    $('#right').on('touchstart', function (ev) {
+        timerRight = setInterval(sendRight, 50); // 250ms interval
+        return false;
+    });
+    $('#right').on('touchend', function (ev) {
+        clearInterval(timerRight);
+        return false;
+    });
+
+    $('#left').on('touchstart', function (ev) {
+        timerLeft = setInterval(sendLeft, 50); // 250ms interval
+        return false;
+    });
+    $('#left').on('touchend', function (ev) {
+        clearInterval(timerLeft);
+        return false;
+    });
+
+    // Press and hold gumba - Konec
+
+
+    var ws = new WebSocket("ws://10.42.0.247:3000/game"); //ip
     myID = -1;
     console.log("my id : " + myID);
     ws.onopen = function()
