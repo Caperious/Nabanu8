@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="HandheldFriendly" content="true" />
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://jsconsole.com/js/remote.js?68e1ba6c-adb3-4ade-85d1-51d5bba28145"></script>
+    <script src="https://jsconsole.com/js/remote.js?b51eb34a-9320-47ff-a01b-bde31232da88"></script>
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 
@@ -17,9 +17,9 @@
 
 <div class="tester">
     <!--<button id="top">gor</button>-->
-    <button id="left" >levo</button>
+    <button id="right" onclick="sendRight()">desno</button>
     <!--<button id="down">dol</button>-->
-    <button id="right">desno</button>
+    <button id="left" onclick="sendLeft()">levo</button>
     <span id="messages">No messages</span>
 </div>
 <div class="welcomeContainerMobile">
@@ -42,40 +42,33 @@
 </div>
 
 <script>
+    //prevents doule tap to zoom on iphone
+    (function($) {
+      $.fn.nodoubletapzoom = function() {
+      $(this).bind('touchstart', function preventZoom(e){
+          var t2 = e.timeStamp;
+          var t1 = $(this).data('lastTouch') || t2;
+          var dt = t2 - t1;
+          var fingers = e.originalEvent.touches.length;
+          $(this).data('lastTouch', t2);
+          if (!dt || dt > 500 || fingers > 1){
+              return; // not double-tap
+          }
+          e.preventDefault(); // double tap - prevent the zoom
+          // also synthesize click events we just swallowed up
+          $(e.target).trigger('click');
+      });};
+    })(jQuery);
+    $("body").nodoubletapzoom();
 
-    // Press and hold gumba
-
-    $('#right').on('touchstart', function (ev) {
-        timerRight = setInterval(sendRight, 50); // 250ms interval
-        return false;
-    });
-    $('#right').on('touchend', function (ev) {
-        clearInterval(timerRight);
-        return false;
-    });
-
-    $('#left').on('touchstart', function (ev) {
-        timerLeft = setInterval(sendLeft, 50); // 250ms interval
-        return false;
-    });
-    $('#left').on('touchend', function (ev) {
-        clearInterval(timerLeft);
-        return false;
-    });
-
-    // Press and hold gumba - Konec
-
-
-//  var ws = new WebSocket("ws://10.42.0.247:3000/game"); //ip
-    var ws = new WebSocket("ws://"+ window.location.host+"/game"); //ip
-
-    // Ostane v mobile view
+    //prevents scrolling on ios
     document.ontouchmove = function(event){
       event.preventDefault();
     }
     document.addEventListener('gesturestart', function (e) {
         e.preventDefault();
     });
+    //button functions
     $(document).ready(function(){
       $(".higlight").text( window.location.host);
       $(".number").click(function(){
@@ -89,8 +82,7 @@
       })
     });
 
-
-    // Gre v dieCurve_view
+    var ws = new WebSocket("ws://"+ window.location.host+"/game"); //ip
     myID = -1;
     console.log("my id : " + myID);
     ws.onopen = function()
