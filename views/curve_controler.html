@@ -3,40 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="HandheldFriendly" content="true" />
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="controlerStyle.css">
     <script src="https://jsconsole.com/js/remote.js?b51eb34a-9320-47ff-a01b-bde31232da88"></script>
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
 
-<body id="bodyMobile">
-<div class="tester">
+<body id="lala">
+
+  <div class="button">
     <!--<button id="top">gor</button>-->
-    <button id="right" onclick="sendRight()">desno</button>
+    <button id="leftt"  class="fa fa-chevron-left fa-5x" aria-hidden="true"></button>
     <!--<button id="down">dol</button>-->
-    <button id="left" onclick="sendLeft()">levo</button>
-    <span id="messages">No messages</span>
-</div>
-<div class="welcomeContainerMobile">
-  <p>Open <span class="higlight"></span> on your desktop and get your code</p>
-</div>
-<p class="code"></p>
-<div id="numpadContainer">
-        <button type="button" name="button" class="keyboard number">1</button>
-        <button type="button" name="button" class="keyboard number">2</button>
-        <button type="button" name="button" class="keyboard number">3</button>
-        <button type="button" name="button" class="keyboard number clearl">4</button>
-        <button type="button" name="button" class="keyboard number">5</button>
-        <button type="button" name="button" class="keyboard number">6</button>
-        <button type="button" name="button" class="keyboard number clearl">7</button>
-        <button type="button" name="button" class="keyboard number">8</button>
-        <button type="button" name="button" class="keyboard number">9</button>
-        <button type="button" name="button" class="keyboard del clearl">DEL</button>
-        <button type="button" name="button" class="keyboard number">0</button>
-        <button type="button" name="button" class="keyboard ok">OK</button>
-</div>
+    <button id="right"  class="fa fa-chevron-right fa-5x" aria-hidden="true"></button>
+    <!-- <i class="fa fa-chevron-left fa-5x" aria-hidden="true"></i> -->
+  </div>
+
+
+  <div class="tester">
+      <span id="messages">No messages</span>
+  </div>
+
 
 <script>
     //prevents doule tap to zoom on iphone
@@ -65,19 +54,7 @@
     document.addEventListener('gesturestart', function (e) {
         e.preventDefault();
     });
-    //button functions
-    $(document).ready(function(){
-      $(".higlight").text( window.location.host);
-      $(".number").click(function(){
-          $(".code").append($(this).text());
-      });
-      $(".del").click(function(){
-          $(".code").text($(".code").text().slice(0,-1));
-      });
-      $(".ok").click(function(){
-         sendCode($(".code").text())
-      })
-    });
+
 
     var ws = new WebSocket("ws://"+ window.location.host+"/game"); //ip
     myID = -1;
@@ -123,6 +100,24 @@
         console.log("sent right");
         console.log("my id : " + myID);
     }
+
+    $('#right').on('touchstart', function (ev) {
+        timerRight = setInterval(sendRight, 50); // 250ms interval
+        return false;
+    });
+    $('#right').on('touchend', function (ev) {
+        clearInterval(timerRight);
+        return false;
+    });
+
+    $('#left').on('touchstart', function (ev) {
+        timerLeft = setInterval(sendLeft, 50); // 250ms interval
+        return false;
+    });
+    $('#left').on('touchend', function (ev) {
+        clearInterval(timerLeft);
+        return false;
+    });
 
 </script>
 </body>
