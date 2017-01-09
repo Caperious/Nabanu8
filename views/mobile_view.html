@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="HandheldFriendly" content="true" />
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://jsconsole.com/js/remote.js?b51eb34a-9320-47ff-a01b-bde31232da88"></script>
+    <script src="https://jsconsole.com/js/remote.js?2a1e06ef-dffb-4226-ace9-12e30118ffe9"></script>
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 
@@ -93,11 +93,20 @@
     {
         var received_msg = evt.data;
         data = JSON.parse(received_msg);
-        console.log("data:");
-        console.log(data);
+//        console.log("data:");
+//        console.log(data);
+        if(data.type=="url")
+        {
+            window.location = data.url;
+        }
+        else if(data.type=="msg")
+        {
+            showMsg(data.msg);
+        }
+
         myID = data.id;
         //console.log(id);
-        document.getElementById("messages").innerHTML+="<br />Recived message: " + received_msg;
+//        document.getElementById("messages").innerHTML+="<br />Recived message: " + received_msg;
     };
 
     ws.onclose = function()
@@ -110,6 +119,7 @@
       //console.log(code);
       //alert(code);
       ws.send(JSON.stringify({myID:myID, command:code}));
+
     }
     function sendLeft()
     {
@@ -122,6 +132,10 @@
         ws.send(JSON.stringify({myID:myID, command:"right"}));
         console.log("sent right");
         console.log("my id : " + myID);
+    }
+    function showMsg(msg)
+    {
+        //TODO
     }
 
 </script>

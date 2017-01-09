@@ -69,6 +69,7 @@ Session.prototype = {
     setHost:function (hostWS) {
         this.hostWS = hostWS;
     }
+
 };
 
 module.exports = Session;
