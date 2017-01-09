@@ -102,7 +102,6 @@ app.ws('/game', function(ws, req) {
                 }
               }
               console.log(activeSessions);
-              //console.log(activeSessions);
               //console.log("Success");
             }
 
