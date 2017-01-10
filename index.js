@@ -15,7 +15,6 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/styles'));
 var expressWs = require('express-ws')(app);
 
-
 var serverHostname;
 var generatedCodes = [];
 var activeSessions = [];
@@ -24,6 +23,7 @@ var hostClient;
 
 app.ws('/game', function (ws, req) {
     ws.on('message', function (data) { // ko dobimo porocilo
+
         data = JSON.parse(data); // sparsamo podatke
         if (containsCode(data.command)) {
             console.log("Failed");
