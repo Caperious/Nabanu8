@@ -10,6 +10,10 @@ function Player(id, direction,cX, cY, color)
     this.cY_old = cY;
     this.cY = cY;
     this.color = color;
+    this.playing = false;
+    this.score = 0;
+    this.name = "Player "+this.id;
+    this.ready = false;
 }
 
 Player.prototype= {
