@@ -6,6 +6,7 @@ html, body{
   justify-content: center;
   align-items: center;
   background: black;
+  color:#95989A;
 
   /*dissable selecting*/
   -webkit-touch-callout: none; /* iOS Safari */
@@ -24,29 +25,35 @@ html, body{
   display: inline-block;
   margin:0px auto;
   /*overflow: auto;*/
-  white-space: nowrap;
   width: 90%;
-}
-button{
-  color: white;
-  border: white solid 1px;
-  border-radius: 180px;
-  width: auto;
-  padding: 10px 20px;
   /*background-color: pink;*/
+  font-size: 40px;
+  text-align: center;
 }
+span{
 
-button:active{
-  color: red;
-  border: red solid 1px;
 }
+span:active{
+  color:#E6E6E6;
+}
+#ok{
 
+}
 #left{
   float:left;
 }
 #right{
   float: right;
 }
-/*.fa-circle{
-  color: red;
-}*/
+#ar-left{
+  /*position: absolute;
+  right: 15px;*/
+}
+#ar-right{
+  /*position: absolute;
+  right: 15px;*/
+}
+
+.fa-circle-thin{
+  position: relative;
+}
