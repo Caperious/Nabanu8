@@ -7,8 +7,9 @@
   <title>Title</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="HandheldFriendly" content="true" />
-  <link rel="stylesheet" type="text/css" href="controlerStyle.css">
-  <script src="https://jsconsole.com/js/remote.js?b51eb34a-9320-47ff-a01b-bde31232da88"></script>
+  <link rel="stylesheet" type="text/css" href="../styles/controlerStyle.css">
+
+  <script src="https://jsconsole.com/js/remote.js?285e407b-cb06-4eb2-a87b-da9141cd0d58"></script>
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
   <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
@@ -17,15 +18,15 @@
   <div class="buttonContainer">
     <!-- <button id="left"  class="fa fa-chevron-left fa-4x" aria-hidden="true"></button> -->
     <!-- <button id="right"  class="fa fa-chevron-right fa-4x" aria-hidden="true"></button> -->
-    <span id="left" class="fa-stack fa-lg" aria-hidden="true">
+    <span id="left" class="fa-stack fa-lg" aria-hidden="true" value="left">
       <i  class="fa fa-circle-thin  fa-stack-2x"></i>
       <i id="ar-left" class="fa fa-chevron-left fa-stack-1x"></i>
     </span>
-    <span id="right" class="fa-stack fa-lg" aria-hidden="true">
+    <span id="right" class="fa-stack fa-lg" aria-hidden="true" value="right">
       <i class="fa fa-circle-thin  fa-stack-2x"></i>
       <i id="ar-right" class="fa fa-chevron-right fa-stack-1x"></i>
     </span>
-    <span id="ok" class="fa-stack fa-lg" aria-hidden="true">
+    <span id="ok" class="fa-stack fa-lg" aria-hidden="true" value="ok">
       <i class="fa fa-circle-thin  fa-stack-2x"></i>
       <i class="fa fa-check fa-stack-1x"></i>
     </span>
@@ -68,13 +69,13 @@
 
   $(document).ready(function(){
     $("#l").click(function(){
-      sendCode("left")
+      sendCode("left",null)
     });
     $("#r").click(function(){
-      sendCode("right")
+      sendCode("right",null)
     });
     $("#o").click(function(){
-      sendCode("ok")
+      sendCode("ok","dieCurve")
     })
   });
 
@@ -91,12 +92,12 @@
     document.getElementById("messages").innerHTML+="<br />Connection is closed";
   };
 
-  function sendCode(code)
+  function sendCode(code,game)
   {
     var url = window.location.href;
     url = url.split('/');
     idRoom = url[url.length-1];
-    ws.send(JSON.stringify({command:code,idRoom:idRoom}));
+    ws.send(JSON.stringify({command:code,idRoom:idRoom,selectGame:game}));
   }
   </script>
 </body>
