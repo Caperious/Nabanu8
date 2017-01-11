@@ -1,47 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Nabanu8</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
+  <meta charset="UTF-8">
+  <title>Nabanu8</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 </head>
-  <body id="bodyDesktop">
-    <div class="welcomeContainer">
-      <p>Open <span id="ipAddress" class="higlight"></span> on your smartphone</p>
-      <p>and enter this code: <span id="code" class="higlight">Please refresh your browser</span>
-    </div>
-
-  </body>
+<body id="bodyDesktop">
+  <div class="welcomeContainer">
+    <p>Open <span id="ipAddress" class="higlight"></span> on your smartphone</p>
+    <p>and enter this code: <span id="code" class="higlight">Please refresh your browser</span>
+  </div>
+</body>
 </html>
-<script>
-    var ws = new WebSocket("ws://"+window.location.host+"/server");
-    var idRoom = -1;
-    $(function() {
+  <script>
+  var ws = new WebSocket("ws://"+window.location.host+"/server");
+  var idRoom = -1;
+  $(function() {
     document.getElementById("code").innerHTML;
     document.getElementById("ipAddress").innerHTML="http://"+window.location.host;
     ws.send(JSON.stringify({action:"generate_code"}));
 
     ws.onmessage = function (evt)
-        {
-            var received_msg = evt.data;
-            data = JSON.parse(received_msg);
-            if(data.type== "code")
-            {
-                document.getElementById("code").innerHTML=data.code;
-                idRoom = data.idRoom;
-            }
+    {
+      var received_msg = evt.data;
+      data = JSON.parse(received_msg);
+      if(data.type== "code")
+      {
+        document.getElementById("code").innerHTML=data.code;
+        idRoom = data.idRoom;
+      }
 
 
-            else if(data.type=="url")
-            {
-                if(idRoom != -1)
-                window.location = data.url+'/'+idRoom;
-            }
+      else if(data.type=="url")
+      {
+        if(idRoom != -1)
+        window.location = data.url+'/'+idRoom;
+      }
 
-        };
+    };
   })
-//windows.location.reload("url")
-</script>
+  //windows.location.reload("url")
+  </script>
