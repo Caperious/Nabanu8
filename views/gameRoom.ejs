@@ -8,8 +8,10 @@
   <script src="http://localhost:35729/livereload.js"></script>
 </head>
 <body id="gameRoom">
+
   <p>Open <span id="testGameRoom" lass="higlight"></span> on your smartphone</p>
   <p>bla <span id = "testAdmin"></span></p>
+
   <p><span id = "testAdminConsole" ></span></p>
   <ul id = "guests"></ul>
 
@@ -71,24 +73,18 @@ $("body").keydown(function(e) {
       {
         document.getElementById("testGameRoom").innerHTML=data.admin;
 
-        console.log(data);
         var s = "";
-        data.clients.forEach(function(client)
+        for(var i = 0; i < data.clients.length; i++)
         {
-           s+='<li>'+client+'</li>';
-        });
+          s+="<li>"+data.clients[i]+"</li>";
+        }
         ulclients.innerHTML=s;
       }
       if(data.isThisHostAdmin == "true")
       document.getElementById("testAdmin").innerHTML=" Jaz sem admin";
 
       if(data.type == "adminCmd")
-      document.getElementById("testAdmin").innerHTML="Admin je kliknil "+data.command;
-
-      if(data.type=="url")
-        {
-            window.location=data.url;
-        }
+      document.getElementById("testAdmin").innerHTML="Admin je kliknil "+data.command
     };
   })
   </script>
