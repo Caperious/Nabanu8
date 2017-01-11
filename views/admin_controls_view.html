@@ -18,8 +18,6 @@
 <body>
 <p id="status">Select a game</p>
   <div class="buttonContainer">
-    <!-- <button id="left"  class="fa fa-chevron-left fa-4x" aria-hidden="true"></button> -->
-    <!-- <button id="right"  class="fa fa-chevron-right fa-4x" aria-hidden="true"></button> -->
     <span id="left" class="fa-stack fa-lg" aria-hidden="true" value="left">
       <i  class="fa fa-circle-thin  fa-stack-2x"></i>
       <i id="ar-left" class="fa fa-chevron-left fa-stack-1x"></i>
@@ -62,15 +60,17 @@
   // $("body").nodoubletapzoom();
 
   //prevents scrolling on ios
-  document.ontouchmove = function(event){
-    event.preventDefault();
-  }
-  document.addEventListener('gesturestart', function (e) {
-    e.preventDefault();
-  });
-  var okClicks=0;
+
   $(document).ready(function(){
-    $("#left").click(function(){
+    document.ontouchmove = function(event){
+      event.preventDefault();
+    }
+    document.addEventListener('gesturestart', function (e) {
+      e.preventDefault();
+    });
+
+    var okClicks=0;
+      $("#left").click(function(){
       sendCode("left",null)
     });
     $("#right").click(function(){
@@ -79,8 +79,16 @@
     $("#ok").click(function(){
       sendCode("ok","dieCurve")
       okClicks++;
-      if(okClicks==1){
+      if(okClicks==0){
+        $("#status").text("Select a game");
+
+      }
+      else if(okClicks==1){
         $("#status").text("Wait for players to get ready");
+
+      }
+      else if(okClicks==2){
+        $("#status").text("Start game");
       }
     })
   });
