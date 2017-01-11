@@ -38,6 +38,11 @@ GameHostEngine.prototype = {
     },
     isGameSelected : function () {
         return this.gameIsSelected;
+    },
+    addPlayers: function(clients){
+        clients.forEach(function(client){
+            this.game.addPlayer(client.id,client.name);
+        });
     }
 };
 
