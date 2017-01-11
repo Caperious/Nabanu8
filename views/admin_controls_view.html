@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="HandheldFriendly" content="true" />
 
-  <link rel="stylesheet" type="text/css" href="../styles/controlerStyle.css">
+  <link rel="stylesheet" type="text/css" href="../controlerStyle.css">
 
   <script src="https://jsconsole.com/js/remote.js?285e407b-cb06-4eb2-a87b-da9141cd0d58"></script>
 
@@ -70,13 +70,13 @@
   });
 
   $(document).ready(function(){
-    $("#l").click(function(){
+    $("#left").click(function(){
       sendCode("left",null)
     });
-    $("#r").click(function(){
+    $("#right").click(function(){
       sendCode("right",null)
     });
-    $("#o").click(function(){
+    $("#ok").click(function(){
       sendCode("ok","dieCurve")
     })
   });
