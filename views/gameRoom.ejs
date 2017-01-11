@@ -32,6 +32,7 @@
         <input placeholder="[ client3 ]">
       </div>
     </div> -->
+
     <p class="higlight" id="code">roomID</p>
     <div class="playerContainer1">
       <span id="testGameRoom" lass="higlight"></span>
@@ -44,15 +45,15 @@
         <div class="game higlight vIzdelavi" id="game3">V izdelavi</div>
     </div>
 
-
 </body>
 </html>
 <script>
   $(document).ready(function(){
+
       var url = window.location.href;
         url = url.split('/');
     	$("#code").text(url[url.length-1]);
-  });
+      });
 
   //var ws = new WebSocket("ws://"+window.location.host+"/server");
   var ws = new WebSocket("ws://"+window.location.host+"/admin");
