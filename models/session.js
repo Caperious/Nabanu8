@@ -1,3 +1,5 @@
+var GameHostEngine = require('./gameHostEngine');
+
 function Session(idRoom,isLocked,host,admin,game)
 {
     this.hostWS = host;
@@ -6,6 +8,7 @@ function Session(idRoom,isLocked,host,admin,game)
     this.isLocked = isLocked;
     this.admin = admin;
     this.game = game;
+    this.gameHostEngine = new GameHostEngine(this.hostWS);
 }
 
 Session.prototype = {
@@ -25,7 +28,7 @@ Session.prototype = {
     },
 
     getClients: function () {
-        return this.players;
+        return this.clients;
     },
 
     getNumberOfClients: function()
@@ -68,6 +71,7 @@ Session.prototype = {
     },
     setHost:function (hostWS) {
         this.hostWS = hostWS;
+        this.gameHostEngine.updateHost(this.hostWS);
     }
 
 };
