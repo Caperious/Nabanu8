@@ -93,7 +93,7 @@
       var received_msg = evt.data;
       data = JSON.parse(received_msg);
       var ulclients = document.getElementById("guests");
-
+      console.log(data);
       //////////////// Loadanje game room
       if(data.type == "gameRoom")
       {
@@ -110,7 +110,11 @@
       document.getElementById("testAdmin").innerHTML=" Jaz sem admin";
 
       if(data.type == "adminCmd")
-      document.getElementById("testAdmin").innerHTML="Admin je kliknil "+data.command
+      document.getElementById("testAdmin").innerHTML="Admin je kliknil "+data.command;
+      if(data.type=="url")
+      {
+          window.location = data.url;
+      }
     };
   })
   </script>

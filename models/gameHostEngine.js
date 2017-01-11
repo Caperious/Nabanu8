@@ -14,9 +14,11 @@ function GameHostEngine(hostWs)
 GameHostEngine.prototype = {
     selectGame : function(gameName)
     {
-        if(gameName = "dieCurve") {
+        // console.log("I got this gameName: " + gameName);
+        if(gameName == "dieCurve") {
+            // console.log("Okej zdej bom naštimou en dieCurve");
             this.game = new r_dieCurve('nimaveze', 'dieCurve', 1);
-            this.gameIsSelected == true;
+            this.gameIsSelected = true;
         };
         // else if pride kaki drugi spil tle not
 
@@ -32,11 +34,12 @@ GameHostEngine.prototype = {
         else
             console.log("Not all players are ready!");
     },
-    ready : function()
+    readySteady : function()
     {   // Ko so vsi igralci v seji ready uporabmo to funkcijo
-        this.ready == true;
+        this.ready = true;
     },
     isGameSelected : function () {
+        console.log("Game is selected : " + this.gameIsSelected);
         return this.gameIsSelected;
     },
     addPlayers: function(clients){

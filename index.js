@@ -30,11 +30,17 @@ function sendCommandGameroom(cmd)  // from console to desktop
   {
     if(activeSessions[i].idRoom == idRoom)
     {
-      activeSessions[i].hostWS.send(JSON.stringify({
-        command : cmd,
-        type: "adminCmd"
-        //Če bo potrebno bomo poslali še kašken podatek
-      }));
+      if(cmd == "url")
+      {
+          activeSessions[i].hostWS.send(JSON.stringify({type:"url", url:"http://" + serverHostname + ':3000/gameRoom/'+idRoom+'/'+activeSessions[i].game}));
+      }
+      else {
+          activeSessions[i].hostWS.send(JSON.stringify({
+              command: cmd,
+              type: "adminCmd"
+              //Če bo potrebno bomo poslali še kašken podatek
+          }));
+      }
     }
   }
 }
@@ -47,7 +53,7 @@ app.ws('/adminMobile', function (ws, req)
   {
     data = JSON.parse(data);
     idRoom = data.idRoom;
-    session = selectSession(idRoom);
+    var session = selectSession(idRoom);
     if (data.command == "left")
     {
       var cmd = "levo";
@@ -61,19 +67,23 @@ app.ws('/adminMobile', function (ws, req)
       console.log("desno");
     }else if (data.command == "ok") {
       var cmd = "ok";
-      if(!session.gameHostEngine.isGameSelected()) {
-          session.gameHostEngine.selectGame(data.gameName);
+      if(session.gameHostEngine.isGameSelected() == false) {
+        // console.log(data.selectGame);
+          session.game=data.selectGame;
+          session.gameHostEngine.selectGame(data.selectGame);
+          console.log("Game is selected!");
       }
       else // Ko drugič pritisne so igralci "pripravljeni" in se požene igra
       {
-        session.gameHostEngine.ready();
+        session.gameHostEngine.readySteady();
+        console.log("Players ready!");
         session.clients.forEach(function (player){
           session.gameHostEngine.game.addPlayer(player.id);
         })
-        ws.send(JSON.stringify({type:"url", url:"http://" + serverHostname + ':3000/'+session.gameHostEngine.game} ));
-
+        sendCommandGameroom("url");
+        console.log("Sending url");
       }
-      sendCommandGameroom(cmd);
+      // sendCommandGameroom(cmd);
       console.log("ok");
       // console.log(session.clients);
     }else {
