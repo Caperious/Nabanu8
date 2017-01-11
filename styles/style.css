@@ -15,6 +15,7 @@
   color:#95989A;
 }
 #bodyMobile{
+  /*dissable selecting*/
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Chrome/Safari/Opera */
      -khtml-user-select: none; /* Konqueror */
@@ -53,7 +54,7 @@ p{
 }
 .welcomeContainerMobile{
   width: 260px;
-  height: 100px;
+  height: ;
   /*top: 0; left: 0; bottom: 400px; right: 0;*/
   margin: auto;
   /*position: absolute;*/
@@ -74,7 +75,7 @@ p{
 }
 
 .keyboard {
-
+  /*visibility: hidden;*/
   padding: 0;
   list-style: none;
 
@@ -112,4 +113,8 @@ p{
   box-shadow: 0 8px 16px 0 rgba(f,f,f,f), 0 6px 20px 0 rgba(f,f,f,f);
   background-color: #4CAF50;
   border-radius: 50%;
+}
+.controllerContainer{
+  background-color: pink;
+  margin: auto;
 }

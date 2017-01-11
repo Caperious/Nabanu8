@@ -1,10 +1,14 @@
-function Session(idRoom,isLocked,admin,game)
+var GameHostEngine = require('./gameHostEngine');
+
+function Session(idRoom,isLocked,host,admin,game)
 {
+    this.hostWS = host;
     this.idRoom = idRoom;
     this.clients = [];
     this.isLocked = isLocked;
     this.admin = admin;
     this.game = game;
+    this.gameHostEngine = new GameHostEngine(this.host);
 }
 
 Session.prototype = {
@@ -24,7 +28,7 @@ Session.prototype = {
     },
 
     getClients: function () {
-        return this.players;
+        return this.clients;
     },
 
     getNumberOfClients: function()
@@ -32,9 +36,9 @@ Session.prototype = {
       return this.clients.length;
     },
 
-    addClient: function(clientID)
+    addClient: function(client)
     {
-      this.clients.push(clientID);
+      this.clients.push(client);
     },
 
     removeClient: function (clientID)
@@ -60,7 +64,16 @@ Session.prototype = {
     setIsLocked:function()
     {
       return !this.isLocked;
+    },
+    getHost:function()
+    {
+        return this.hostWS;
+    },
+    setHost:function (hostWS) {
+        this.hostWS = hostWS;
+        this.gameHostEngine.updateHost(this.hostWS);
     }
+
 };
 
 module.exports = Session;

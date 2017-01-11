@@ -7,14 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="HandheldFriendly" content="true" />
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://jsconsole.com/js/remote.js?b51eb34a-9320-47ff-a01b-bde31232da88"></script>
+    <script src="https://jsconsole.com/js/remote.js?2a1e06ef-dffb-4226-ace9-12e30118ffe9"></script>
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 
 <body id="bodyMobile">
-  <div class="test">
-  </div>
-
 <div class="tester">
     <!--<button id="top">gor</button>-->
     <button id="right" onclick="sendRight()">desno</button>
@@ -42,13 +42,33 @@
 </div>
 
 <script>
+    //prevents doule tap to zoom on iphone
+    (function($) {
+      $.fn.nodoubletapzoom = function() {
+      $(this).bind('touchstart', function preventZoom(e){
+          var t2 = e.timeStamp;
+          var t1 = $(this).data('lastTouch') || t2;
+          var dt = t2 - t1;
+          var fingers = e.originalEvent.touches.length;
+          $(this).data('lastTouch', t2);
+          if (!dt || dt > 500 || fingers > 1){
+              return; // not double-tap
+          }
+          e.preventDefault(); // double tap - prevent the zoom
+          // also synthesize click events we just swallowed up
+          $(e.target).trigger('click');
+      });};
+    })(jQuery);
+    $("body").nodoubletapzoom();
 
+    //prevents scrolling on ios
     document.ontouchmove = function(event){
       event.preventDefault();
     }
     document.addEventListener('gesturestart', function (e) {
         e.preventDefault();
     });
+    //button functions
     $(document).ready(function(){
       $(".higlight").text( window.location.host);
       $(".number").click(function(){
@@ -75,12 +95,22 @@
     ws.onmessage = function (evt)
     {
         var received_msg = evt.data;
+        debugger;
         data = JSON.parse(received_msg);
-        console.log("data:");
-        console.log(data);
+//        console.log("data:");
+//        console.log(data);
+        if(data.type=="url")
+        {
+            window.location = data.url;
+        }
+        else if(data.type=="msg")
+        {
+            showMsg(data.msg);
+        }
+
         myID = data.id;
         //console.log(id);
-        document.getElementById("messages").innerHTML+="<br />Recived message: " + received_msg;
+//        document.getElementById("messages").innerHTML+="<br />Recived message: " + received_msg;
     };
 
     ws.onclose = function()
@@ -93,6 +123,7 @@
       //console.log(code);
       //alert(code);
       ws.send(JSON.stringify({myID:myID, command:code}));
+
     }
     function sendLeft()
     {
@@ -105,6 +136,10 @@
         ws.send(JSON.stringify({myID:myID, command:"right"}));
         console.log("sent right");
         console.log("my id : " + myID);
+    }
+    function showMsg(msg)
+    {
+        //TODO
     }
 
 </script>

@@ -11,159 +11,180 @@ var app = express();
 var Session = require('./models/session.js');
 //var session = new Session(1,false,null,null);
 var shortid = require('shortid');
-
-var generatedCodes=[];
-var activeSessions = [];
-
-function generateCode()
-{
-
-  var i;
-  var code ="";
-
-  for(i = 0; i < 8; i++)
-  {
-    code = code + Math.floor((Math.random() * 10));
-  }
-  while(containsCode(code) == false) // Če že ta ID obstaja se generira nova koda
-  {
-    for(i = 0; i < 8; i++)
-    {
-      code = code + Math.floor((Math.random() * 10));
-    }
-  }
-  generatedCodes.push(code);
-  var session = new Session(code,false,null,null);
-  activeSessions.push(session);
-
-}
-
-function containsCode(code)
-{
-  /*
-    Preverja če že slučajno obstaja ta ID... (malo verjetno ampak vseeno)
-  */
-  return generatedCodes.indexOf(code) == -1;
-}
-
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/styles'));
 var expressWs = require('express-ws')(app);
-var Game = require('./dieCurve/game_main.js');
-game = new Game('game_canvas',"DieCurve",'1');
 
+var serverHostname;
+var generatedCodes = [];
+var activeSessions = [];
+var view_host;
+var hostClient;
 
-var clientCounter = 0;
-var clients = [];
-app.ws('/game', function(ws, req) {
-    ws.on('message', function(data) { // ko dobimo porocilo
+app.ws('/game', function (ws, req) {
+    ws.on('message', function (data) { // ko dobimo porocilo
+
         data = JSON.parse(data); // sparsamo podatke
-        if(data.initial == "true") // ce je to prvo sporocilo od nekoga ga shranimo v array clientov
-        {
-            console.log(data);
-            //console.log(session);
-            clients[clientCounter] = {};
-            clients[clientCounter].ws = ws; //shranimo vse povezave do serverja
-            clients[clientCounter].lastActive= new Date().getTime() / 100000;
-            game.addPlayer(clientCounter); // dodamo igralca, pozneje potrebno dodat izbiranje igre ce je igralec prvi v tej seji
-            ws.send(JSON.stringify({id:clientCounter})); // ter mu posljemo id, da ob naslednjem sporocilu vemo kdo posilja
-            clientCounter++; // idji clientov
-            //console.log(data.myID+" "+data.command);
-            //console.log(ws);
+        if (containsCode(data.command)) {
+            console.log("Failed");
+            console.log(data.command);
+            console.log("Kode: ");
+            console.log(generatedCodes);
         }
-        else
+        else if(data.dieCurve == "true") // Če je igralec poslal ukaz iz dieCurve igre
         {
-            console.log(data.myID+" "+data.command);
+            activeSessions[data.idRoom].gameHostEngine.game.sendCmdToPlayer(data.cmd, data.myID);
+        }
+        else {
+            // var attachClient // spremenljivka za dodajanje clienta v session
+            var exits = false;
+            for (var i = 0; i < activeSessions.length; i++) {
 
-            if(containsCode(data.command))
-            {
-              console.log("Failed");
-            }
-            else
-            {
-              var attachClient // spremenljivka za dodajanje clienta v session
-
-              for(var i = 0; i < activeSessions.length; i++)
-              {
                 //console.log(activeSessions[i].getIdRoom());
-                if(activeSessions[i].getIdRoom() == data.command)
-                {
-                  //console.log("Isti je");
-                  attachClient = shortid.generate();
-                  // dodaj clienta v ta Game room
-                  if(activeSessions[i].getNumberOfClients() == 0)
-                  {
-                    activeSessions[i].addClient(attachClient);
-                    activeSessions[i].setAdmin(attachClient);
-                    break;
-                  }
-                  activeSessions[i].addClient(attachClient);
-                  break;
-                }
-              }
-              console.log(activeSessions);
-              //console.log("Success");
-            }
+                if (activeSessions[i].getIdRoom() == data.command) {
+                    // Če client že obstaja ga refreshamo
 
-            //clients[0].lastActive = 0;
-            if(data.command == "left")
-                game.sendCmdToPlayer("left",data.myID);
-            else if(data.command == "right")
-                game.sendCmdToPlayer("right",data.myID);
-            else
-                "WE HAVE A HACKERMAN!";
+                    console.log(activeSessions);
+                    console.log("==========================");
+                    for (var j = 0; j < activeSessions[i].clients.length; j++) {
+                        console.log("CLient IP: " + activeSessions[i].clients[j].ip + " ws_ip: "+ ws._socket.remoteAddress);
+                        if (activeSessions[i].clients[j].ip == ws._socket.remoteAddress) {
+                            activeSessions[i].clients[j].ws = ws;
+                            exits = true;
+                            break;
+                        }
+                    }
+                    // Če client ne obstaja dodamo novega v sejo
+                    if (!exits) {
+                        console.log("Naj bi dodajal");
+                        client = {};
+                        client.id = shortid.generate();
+                        client.ip = ws._socket.remoteAddress;
+                        // ipList[client.id] = client.ip;
+                        client.ws = ws;
+                        // dodaj clienta v ta Game room
+                        if (activeSessions[i].getNumberOfClients() == 0) {
+                            activeSessions[i].addClient(client);
+                            activeSessions[i].setAdmin(client.id);
+                            // console.log(activeSessions);
+                            activeSessions[i].hostWS.send(JSON.stringify({
+                                type: "url",
+                                url: "http://" + serverHostname + ":3000/gameRoom"
+                            }));
+                            ws.send(JSON.stringify({
+                                type: "url",
+                                url: "http://" + serverHostname + ':3000/admin_controls_view'
+                            }));
+                            break;
+                        }
+                        activeSessions[i].addClient(client);
+                        ws.send(JSON.stringify({
+                            type: "msg",
+                            msg: "Uspešno ste se prijavili v skupino. Prosimo počakajte da admin izbere igro",
+                            myID : client.id
+                        }));
+                        break;
+                    }
+                    else // Ce klient obstaja breakamo da ne loopamo skozi vse seje
+                        break;
+                }
+            }
         }
 
-    })
-});
-
-app.ws('/server', function(ws, req) {
-    ws.on('message', function(data) { // ko dobimo sporocilo
-        data = JSON.parse(data); // sparsamo podatke
-        if(data.refresh == "true")
-        {
-            if(clients.length > 0)
-            {
-                // console.log(game.getPlayers());
-                for (index = 0; index < clients.length; ++index) {
-                    //console.log("Player : "+ index +" has been inactive for :"+((new Date().getTime() / 1000) - clients[index].lastActive));
-                    if((new Date().getTime() / 1000) - clients[index].lastActive  > 10){
-
-                        game.removePlayer(index);
-                        clients.splice(index,1);
-                        clientCounter--;
-                    }
-                }
-                console.log("OK, refresham!");
-
-                ws.send(JSON.stringify({refresh:"true",players : game.getPlayers(), clientCounter : clientCounter}));
+        //clients[0].lastActive = 0;
+        if (typeof clients[data.myID] !== 'undefined') {
+            if (data.command == "left")
+                game.sendCmdToPlayer("left", data.myID);
+            else if (data.command == "right")
+                game.sendCmdToPlayer("right", data.myID);
+            else {
+                console.log("Client was inactive for too long.");
+                console.log(clients);
             }
         }
     });
 });
 
-app.get('/code', function(req, res){
-  generateCode();
-  res.render('code',{clients: clients, code:generatedCodes[generatedCodes.length -1 ]});
-})
+app.ws('/server', function (ws, req) {
+    console.log("Host has connected! ");
+    hostClient = ws;
+    ws.on('message', function (data) { // ko dobimo sporocilo
+        data = JSON.parse(data); // sparsamo podatke
+        if (data.action == "generate_code") {
+            console.log("Generiram kodo");
+            generateCode();
+            ws.send(JSON.stringify({
+                type: "code",
+                code: generatedCodes[generatedCodes.length - 1],
+                idRoom: activeSessions[activeSessions.length - 1].idRoom
+            }));
+        }
+        else if(data.selectGame == "true")
+        {
+            activeSessions[data.idRoom].gameHostEngine.selectGame(data.gameName);
+        }
+        else if(data.playersReady == true) // Ko admin pritisne play
+        {
+            activeSessions[data.idRoom].gameHostEngine.ready(); // Vsi igralci so pripravljeni || admin pritisne play kr nm bol paše
+            if(activeSessions[data.idRoom].gameHostEngine.gameIsSelected()) { // Če je igra izbrana jo zaženemo
+                activeSessions[data.idRoom].gameHostEngine.runGame();
+            }
+        }
 
+});
+
+app.get('/gameRoom/:idRoom', function (req, res) {
+    // console.log(req.params.idRoom);
+    // Poiščeš session s tem req.params.idRoom v actieveSessions ter zrenderiraš še podatke ki jih rabiš iz te seje
+    res.render('gameRoom');
+});
+
+app.get('/admin_controls_view', function (req, res) {
+    res.sendFile(path.join(__dirname, 'views', 'admin_controls_view.html'));
+});
 
 app.get('/', function (req, res) {
+    serverHostname = req.hostname;
     console.log("User agent: " + req.headers['user-agent']);
     var mydevice = device(req.headers['user-agent']);
     // console.log("Device:");
-    if(mydevice.type == 'desktop') {
+    if (mydevice.type == 'desktop') {
 
-      res.sendFile(path.join(__dirname, 'views', 'index.html'));
+        res.render('code');
     }
-    else
-    {
+
+    else {
         res.sendFile(path.join(__dirname, 'views', 'mobile_view.html'));
     }
-})
-
-
-
+});
 app.listen(3000, function () {
     console.log('Example app listening on port 3000!')
-})
+});
+
+function generateCode() {
+    var i;
+    var code = "";
+
+    for (i = 0; i < 8; i++) {
+        code = code + Math.floor((Math.random() * 10));
+    }
+    while (containsCode(code) == false) // Če že ta ID obstaja se generira nova koda
+    {
+        for (i = 0; i < 8; i++) {
+            code = code + Math.floor((Math.random() * 10));
+        }
+    }
+    generatedCodes.push(code);
+    var session = new Session(code, false, hostClient, null, null);
+    console.log("Pushing session!");
+    activeSessions.push(session);
+}
+function containsCode(code) {
+    /*
+     Preverja če že slučajno obstaja ta ID... (malo verjetno ampak vseeno)
+     */
+    if (typeof code !== 'undefined') {
+        return generatedCodes.indexOf(code) == -1;
+    }
+    return false;
+}
