@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>GameRoom</title>
-  <link rel="stylesheet" type="text/css" href="gameroom.css">
+  <link rel="stylesheet" type="text/css" href="../gameroom.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="http://localhost:35729/livereload.js"></script>
 </head>
 <body id="gameRoom">
-  <p>Open <span id="testGameRoom" class="higlight"></span> on your smartphone</p>
-  <p>bla <span id = "testAdmin"></span></p>
+  <!-- <p>bla <span id = "testAdmin"></span></p>
   <p><span id = "testAdminConsole" ></span></p>
   <ul id = "guests"></ul>
-  
+
   <div id="container">
     <div id="topDiv">
       <div class="welcomeContainerMobile">
@@ -28,10 +28,15 @@
         <input placeholder="[ client2 ]">
         <input placeholder="[ client3 ]">
       </div>
+    </div> -->
+    <div class="topDiv">Select a game</div>
+    <div class="gameContainer">
+        <div class="gameSelect"></div>
+        <div class="gameSelect"></div>
     </div>
-  </body>
-  </html>
-  <script>
+</body>
+</html>
+<script>
   //var ws = new WebSocket("ws://"+window.location.host+"/server");
   var ws = new WebSocket("ws://"+window.location.host+"/admin");
   var idRoom = -1;
