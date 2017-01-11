@@ -132,6 +132,7 @@ app.ws('/server', function (ws, req) {
         }
 
 });
+})
 
 app.get('/gameRoom/:idRoom', function (req, res) {
     // console.log(req.params.idRoom);

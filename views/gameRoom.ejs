@@ -7,19 +7,22 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
   <body id="gameRoom">
-    <input placeholder="Game Room">
-    <input placeholder="[ gameID ]">
-    <div id="games">
-      <button class="button" disabled="false">Button</button>
-      <button class="button" disabled="false">Button2</button>
-      <button class="button" disabled="false">Button3</button>
-      <button class="button" disabled="false">Button4</button>
-    </div>
-    <div id="clients">
-      <input placeholder="[ admin ]">
-      <input placeholder="[ client1 ]">
-      <input placeholder="[ client2 ]">
-      <input placeholder="[ client3 ]">
+    <div id="container">
+      <div id="topDiv">
+        <div class="welcomeContainerMobile">
+          <p class="gameRoom"><span class="gameRoom"></span>GameRoom</p>
+          <p class="gameID"><span class="gameID"></span>gameID</p>
+        </div>
+      </div>
+      <div id="games">
+        <button class="gameOne" disabled="false">GAME ONE</button>
+        <button class="gameTwo" disabled="false">GAME TWO</button>
+      <div id="clients">
+        <input placeholder="[ admin ]">
+        <input placeholder="[ client1 ]">
+        <input placeholder="[ client2 ]">
+        <input placeholder="[ client3 ]">
+      </div>
     </div>
   </body>
 </html>
