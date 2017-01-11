@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-
+<p id="status">Select a game</p>
   <div class="buttonContainer">
     <!-- <button id="left"  class="fa fa-chevron-left fa-4x" aria-hidden="true"></button> -->
     <!-- <button id="right"  class="fa fa-chevron-right fa-4x" aria-hidden="true"></button> -->
@@ -68,7 +68,7 @@
   document.addEventListener('gesturestart', function (e) {
     e.preventDefault();
   });
-
+  var okClicks=0;
   $(document).ready(function(){
     $("#left").click(function(){
       sendCode("left",null)
@@ -78,6 +78,10 @@
     });
     $("#ok").click(function(){
       sendCode("ok","dieCurve")
+      okClicks++;
+      if(okClicks==1){
+        $("#status").text("Wait for players to get ready");
+      }
     })
   });
 
