@@ -43,10 +43,10 @@ html, body{
   background-size: 109% auto;
   position: relative;
   /*left:-200px;*/
-  -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    transition: all 0.2s ease;
+  -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 .vIzdelavi{
   background-image:url("zajecbg.jpg");
@@ -68,10 +68,10 @@ html, body{
   height: 250px;
   margin-right: 10px;
   margin-left: 10px;
-  -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    transition: all 0.2s ease;
+  -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
 
 }
 .gameSelected{
@@ -79,10 +79,10 @@ html, body{
   font-size: 30px;
   width: 260px;
   height: 325px;
-  -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    transition: all 0.2s ease;
+  -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 p { display: inline }
 .gameRoom{
