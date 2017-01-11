@@ -17,14 +17,17 @@
 <ul id="clients"></ul>
 
 <canvas id="game_area" width="900" height="900"></canvas>
+<ul class="scoreboard_ul">
+
+</ul>
 <script>
 
     var ws = new WebSocket("ws://"+window.location.host+"/dieCurveHost");
-
+    var li_items = "";
     var url = window.location.href;
     url = url.split('/');
     idRoom = url[url.length-2];
-
+    var ScoreBoard = [];
     ws.onopen = function()
     {
         // Web Socket is connected, send data using send()
@@ -61,12 +64,20 @@
 //                var player = data.game.players[i];
 //                paint(player.cX_old,player.cY_old, player.cX, player.cY,player.color);
 //            }
+            console.log(data);
             for (var key in data.game.players) {
                 if (data.game.players.hasOwnProperty(key)) {
 //                    alert("Tle not smo");
                     var player = data.game.players[key];
-                    console.log(player);
-                    paint(player.cX_old,player.cY_old, player.cX, player.cY,player.color);
+//                    console.log(player);
+                    updateScore(player.scoreBoardID, data.game.scoreBoard[player.scoreBoardID]);
+
+                    if(player.playing && !hitTest(player.cX,player.cY))
+                        paint(player.cX_old,player.cY_old, player.cX, player.cY,player.color);
+                    else
+                    {
+                        ws.send(JSON.stringify({idRoom:idRoom,myID:player.id,action:"player_crashed"}));
+                    }
                 }
 
             }
@@ -82,6 +93,24 @@
 //                }
 //            }
         }
+        else if(data.type=="initScoreboard")
+        {
+
+            for (var key in data.game.players) {
+                if (data.game.players.hasOwnProperty(key)) {
+//                    alert("Tle not smo");
+                    var player = data.game.players[key];
+//                    console.log(player);
+                    li_items += '<li><span class="player_name" style="color='+player.color+'">'+player.name+'</span><span id="score_'+player.scoreBoardID+'">'+data.game.scoreBoard[player.scoreBoardID]+'</span></li>';
+
+                    updateScore(player.scoreBoardID, data.game.scoreBoard[player.scoreBoardID]);
+
+                }
+
+            }
+            $('.scoreboard_ul').html(li_items);
+
+        }
     };
 
     ws.onclose = function()
@@ -91,12 +120,10 @@
         console.log("Websocket has closed");
     };
 
-//    function refresh()
-//    {
-//        console.log("Refresham!");
-//        ws.send(JSON.stringify({refresh:"true"}));
-//    }
-//    setInterval(function(){refresh(); }, 3000);
+    function updateScore(scoreboardID,score)
+    {
+        $('#score_'+scoreboardID).html(score);
+    }
 </script>
 
 <script>
@@ -104,25 +131,22 @@
 
     function paint(cxo,cyo,cx,cy,color)
     {
-        area.strokeStyle = color;
-        area.fillStyle = color;
-        area.beginPath();
-        area.lineWidth=10;
+            area.strokeStyle = color;
+            area.fillStyle = color;
+            area.beginPath();
+            area.lineWidth = 10;
 //        area.strokeStyle="green"; // Green path
-        area.moveTo(cxo,cyo);
-        area.lineTo(cx,cy);
-        area.stroke();
-//        this.drawingContext.strokeStyle = player.color;
-//        this.drawingContext.fillStyle = player.color;
-//        this.drawingContext.beginPath();
-//        this.drawingContext.lineWidth = Config.lineWidth;
-//        this.drawingContext.moveTo(player.x, player.y);
-//        this.drawingContext.lineTo(player.x + deltaX, player.y + deltaY);
-//        this.drawingContext.stroke();
+            area.moveTo(cxo, cyo);
+            area.lineTo(cx, cy);
+            area.stroke();
     }
-    paint();
+    function hitTest(cx,cy)
+    {
+        if (area.getImageData(cx, cy, 1, 1).data[3] > 100) {
+            return true;
+        }
 
-//    function drawLine(playerID, coordinates)
+    }
 </script>
 </body>
 </html>

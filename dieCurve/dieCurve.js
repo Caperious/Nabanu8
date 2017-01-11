@@ -10,15 +10,23 @@ function DieCurve(canvas, gameName, gameID)
     this.GameName = gameName;
     this.gameID = gameID;
     this.players = {};
-    this.scoreBoard = [];
+    this.scoreBoard = {};
+    this.interval;
+    this.scoreBoardID;
+    this.running = false;
+    this.playersCounter = 0;
 }
 
 DieCurve.prototype = {
     addPlayer: function(id,name)
     {
         player = new Player(id,random(0,360), random(0,750),random(0,750),color.randomColor(),name);
-        if(typeof this.players[id] == 'undefined')
+        player.scoreBoardID = this.playersCounter++;
+        if(typeof this.players[id] == 'undefined') {
             this.players[id] = player;
+            this.scoreBoard[player.scoreBoardID] = 0;
+        }
+
 
     },
     sendCmdToPlayer : function (cmd, id)
@@ -60,34 +68,64 @@ DieCurve.prototype = {
     playerCollided: function(player)
     {
         player.playing = false;
-        this.updatePlayerScoreBoard(player.id);
+        this.updatePlayerScoreBoard(player.scoreBoardID);
     },
-    updatePlayerScoreBoard: function(idPlayer)
+    updatePlayerScoreBoard: function(idPlayer) {
+        remaining = this.remainingPlayers();
+        console.log("je še toliko igralcev: "+ remaining);
+        console.log("izračunal sem : " + this.playersCounter + ' - ' + remaining);
+        this.scoreBoard[idPlayer] += this.playersCounter - remaining;
+        if (remaining == 1) {
+            this.awardLastPlayer();
+            this.stopRunning();
+        }
+    },
+    awardLastPlayer : function()
     {
-        scoreBoard[idPlayer] = this.players.length - this.remainingPlayers();
+        for (var key in this.players) {
+            if (this.players.hasOwnProperty(key)) {
+//                    alert("Tle not smo");
+                var player = this.players[key];
+                if(player.playing == true)
+                    this.scoreBoard[player.scoreBoardID] += this.playersCounter;
+            }
+        }
     },
     remainingPlayers: function()
     {
         var counter = 0;
-        this.players.forEach(function(player) {
-           if(player.playing == true)
-               counter++;
-        });
+        for (var key in this.players) {
+            if (this.players.hasOwnProperty(key)) {
+//                    alert("Tle not smo");
+                var player = this.players[key];
+                if(player.playing == true)
+                    counter++;
+            }
+        }
         return counter;
     },
     run:function(ws)
     {
-        console.log()
-        var that = this;
+        ws.send(JSON.stringify({type:"initScoreboard",game:this}));
+        if(!this.running)
+        {
+            this.running=true;
+            var that = this;
+            this.interval = setInterval(function()
+                {
+                    that.updatePlayers();
+                    // console.log(that);
+                    ws.send(JSON.stringify({"type": "gameinfo", "game": that}));
+                }
+            ,50,[ws,that]);
+        }
+    },
+    stopRunning:function()
+    {
 
-        // return;
-        setInterval(function()
-            {
-                that.updatePlayers();
-                // console.log(that);
-                ws.send(JSON.stringify({"type": "gameinfo", "game": that}));
-            }
-        ,50,[ws,that]);
+        clearInterval(this.interval);
+        this.running=false;
+        console.log("dieCurve stopped running");
     }
 };
 module.exports = DieCurve;
