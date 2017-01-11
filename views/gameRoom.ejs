@@ -42,39 +42,39 @@
 </html>
 <script>
   $(document).ready(function(){
-    var games=["#game1","#game2","#game3"]
-    var selectedGame=1;
-    var left = $(".gameContainer").css("left");
-    $(games[selectedGame]).addClass("gameSelected");
-    $(".gameContainer").css({left: "1px"});
-    $("body").keydown(function(e) {
-      if(e.keyCode == 37) { // left
-        selectedGame--;
-        if(selectedGame<0){
-          selectedGame=games.length-1;
-        }
-        $(".gameSelected").removeClass("gameSelected");
-        $(games[selectedGame]).addClass("gameSelected");
-        // $(".gameContainer").css({left: "200px"});
-      }
-      else if(e.keyCode == 39) { // right
-        selectedGame++;
-        if(selectedGame>games.length-1){
-          selectedGame=0;
-        }
-        $(".gameSelected").removeClass("gameSelected");
-        $(games[selectedGame]).addClass("gameSelected");
-      }
-      if(selectedGame==1){
-        $(".gameContainer").css({left: "0px"});
-      }
-      else if (selectedGame==0) {
-        $(".gameContainer").css({left: "240px"});
-      }
-      else if (selectedGame==2) {
-        $(".gameContainer").css({left: "-240px"});
-      }
-    });
+    // var games=["#game1","#game2","#game3"]
+    // var selectedGame=1;
+    // var left = $(".gameContainer").css("left");
+    // $(games[selectedGame]).addClass("gameSelected");
+    // $(".gameContainer").css({left: "1px"});
+    // $("body").keydown(function(e) {
+    //   if(e.keyCode == 37) { // left
+    //     selectedGame--;
+    //     if(selectedGame<0){
+    //       selectedGame=games.length-1;
+    //     }
+    //     $(".gameSelected").removeClass("gameSelected");
+    //     $(games[selectedGame]).addClass("gameSelected");
+    //     // $(".gameContainer").css({left: "200px"});
+    //   }
+    //   else if(e.keyCode == 39) { // right
+    //     selectedGame++;
+    //     if(selectedGame>games.length-1){
+    //       selectedGame=0;
+    //     }
+    //     $(".gameSelected").removeClass("gameSelected");
+    //     $(games[selectedGame]).addClass("gameSelected");
+    //   }
+    //   if(selectedGame==1){
+    //     $(".gameContainer").css({left: "0px"});
+    //   }
+    //   else if (selectedGame==0) {
+    //     $(".gameContainer").css({left: "240px"});
+    //   }
+    //   else if (selectedGame==2) {
+    //     $(".gameContainer").css({left: "-240px"});
+    //   }
+    // });
   });
 
   //var ws = new WebSocket("ws://"+window.location.host+"/server");
@@ -110,6 +110,14 @@
       document.getElementById("testAdmin").innerHTML=" Jaz sem admin";
 
       if(data.type == "adminCmd")
+      {
+        /*
+        if(data.command == "levo")
+          moveLeft();
+        else if(data.command == "desno")
+          moveRight();*/
+        sendPremik(data.command);
+      }
       document.getElementById("testAdmin").innerHTML="Admin je kliknil "+data.command;
       if(data.type=="url")
       {
@@ -117,4 +125,51 @@
       }
     };
   })
+/*
+  function moveLeft()
+  {
+    console.log("Premaknil sem se levo");
+  }
+
+  function moveRight()
+  {
+    console.log("Premaknil sem se desno");
+  }
+  */
+  var games=["#game1","#game2","#game3"]
+  var selectedGame=1;
+  var left = $(".gameContainer").css("left");
+function sendPremik(move)
+  {
+    $(games[selectedGame]).addClass("gameSelected");
+    $(".gameContainer").css({left: "1px"});
+    if(move == "levo")
+    {
+      selectedGame--;
+      if(selectedGame<0){
+        selectedGame=games.length-1;
+      }
+      $(".gameSelected").removeClass("gameSelected");
+      $(games[selectedGame]).addClass("gameSelected");
+    }
+    if(move == "desno")
+    {
+      selectedGame++;
+      if(selectedGame>games.length-1){
+        selectedGame=0;
+      }
+      $(".gameSelected").removeClass("gameSelected");
+      $(games[selectedGame]).addClass("gameSelected");
+    }
+    if(selectedGame==1){
+      $(".gameContainer").css({left: "0px"});
+    }
+    else if (selectedGame==0) {
+      $(".gameContainer").css({left: "240px"});
+    }
+    else if (selectedGame==2) {
+      $(".gameContainer").css({left: "-240px"});
+
+    }
+  }
   </script>
