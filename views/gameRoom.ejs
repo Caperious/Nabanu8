@@ -67,7 +67,7 @@ $("body").keydown(function(e) {
       var received_msg = evt.data;
       data = JSON.parse(received_msg);
       var ulclients = document.getElementById("guests");
-
+      console.log(data);
       //////////////// Loadanje game room
       if(data.type == "gameRoom")
       {
