@@ -31,12 +31,23 @@
     </div> -->
     <div class="topDiv">Select a game</div>
     <div class="gameContainer">
-        <div class="gameSelect"></div>
-        <div class="gameSelect"></div>
+        <div class="gameSelect" id="game1">1</div>
+        <div class="gameSelect big" id="game2">2</div>
+        <div class="gameSelect" id="game3">3</div>
     </div>
+    <p id="x">neki</p>
 </body>
 </html>
 <script>
+$("body").keydown(function(e) {
+  if(e.keyCode == 37) { // left
+    $("#x").text("left");
+  }
+  else if(e.keyCode == 39) { // right
+    $("#x").text("right");
+  }
+});
+
   //var ws = new WebSocket("ws://"+window.location.host+"/server");
   var ws = new WebSocket("ws://"+window.location.host+"/admin");
   var idRoom = -1;

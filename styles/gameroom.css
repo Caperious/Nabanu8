@@ -35,10 +35,14 @@ html, body{
 }
 .gameSelect{
   background-color: red;
-  width: 20%;
-  height: 40%;
+  width: 200px;
+  height: 250px;
   margin-right: 10px;
   margin-left: 10px;
+}
+.big{
+  width: 250px;
+  height: 300px;
 }
 p { display: inline }
 .gameRoom{
