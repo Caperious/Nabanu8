@@ -1,0 +1,30 @@
+#gameRoom{
+  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-variant: normal;
+  margin: auto;
+  background-color: black;
+  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 40px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 40px;
+  color:#95989A;
+}
+
+#topDiv{
+  color: #00930A;
+  text-align: left;
+  background-color: #000;
+  align-items: center;
+}
+p { display: inline }
+.gameRoom{
+  text-align: left;
+}
+.gameID{
+  padding-left: 500px;
+  text-align: right;
+}
