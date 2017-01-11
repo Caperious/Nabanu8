@@ -7,6 +7,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
   <body id="gameRoom">
+    <p>Open <span id="testGameRoom" class="higlight"></span> on your smartphone</p>
+    <p>bla <span id = "testAdmin"></span></p>
+    <ul id = "guests"></ul>
+
+
+
+
+
     <div id="container">
       <div id="topDiv">
         <div class="welcomeContainerMobile">
@@ -29,7 +37,37 @@
 
 
 <script>
-$(function() {
+var ws = new WebSocket("ws://"+window.location.host+"/server");
+var idRoom = -1;
+
+$(function()
+{
+
+  var url = window.location.href;
+  url = url.split('/');
+  idRoom = url[url.length-1];
+  ws.send(JSON.stringify({action:"sendMeSessionData",idRoom:idRoom}));
+
+  ws.onmessage = function (evt)
+      {
+          var received_msg = evt.data;
+          data = JSON.parse(received_msg);
+          var ulclients = document.getElementById("guests");
+
+          if(data.type == "gameRoom")
+          {
+              document.getElementById("testGameRoom").innerHTML=data.admin;
+
+              var s = "";
+              for(var i = 0; i < data.clients.length; i++)
+              {
+                  s+="<li>"+data.clients[i]+"</li>";
+              }
+              ulclients.innerHTML=s;
+          }
+          if(data.isThisHostAdmin == "true")
+            document.getElementById("testAdmin").innerHTML=" Jaz sem admin";
+      };
 
 
 })

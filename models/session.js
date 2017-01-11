@@ -8,7 +8,7 @@ function Session(idRoom,isLocked,host,admin,game)
     this.isLocked = isLocked;
     this.admin = admin;
     this.game = game;
-    this.gameHostEngine = new GameHostEngine(this.host);
+    this.gameHostEngine = new GameHostEngine(this.hostWS);
 }
 
 Session.prototype = {
