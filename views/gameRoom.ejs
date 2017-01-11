@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>GameRoom</title>
-  <link rel="stylesheet" type="text/css" href="gameroom.css">
+  <link rel="stylesheet" type="text/css" href="../gameroom.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="http://localhost:35729/livereload.js"></script>
 </head>
 <body id="gameRoom">
   <p>Open <span id="testGameRoom" lass="higlight"></span> on your smartphone</p>
   <p>bla <span id = "testAdmin"></span></p>
   <p><span id = "testAdminConsole" ></span></p>
   <ul id = "guests"></ul>
-  
+
   <div id="container">
     <div id="topDiv">
       <div class="welcomeContainerMobile">
@@ -28,10 +29,26 @@
         <input placeholder="[ client2 ]">
         <input placeholder="[ client3 ]">
       </div>
+    </div> -->
+    <div class="topDiv">Select a game</div>
+    <div class="gameContainer">
+        <div class="gameSelect" id="game1">1</div>
+        <div class="gameSelect big" id="game2">2</div>
+        <div class="gameSelect" id="game3">3</div>
     </div>
-  </body>
-  </html>
-  <script>
+    <p id="x">neki</p>
+</body>
+</html>
+<script>
+$("body").keydown(function(e) {
+  if(e.keyCode == 37) { // left
+    $("#x").text("left");
+  }
+  else if(e.keyCode == 39) { // right
+    $("#x").text("right");
+  }
+});
+
   //var ws = new WebSocket("ws://"+window.location.host+"/server");
   var ws = new WebSocket("ws://"+window.location.host+"/admin");
   var idRoom = -1;
