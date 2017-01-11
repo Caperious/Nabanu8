@@ -7,16 +7,16 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body id="gameRoom">
-  <p>Open <span id="testGameRoom" class="higlight"></span> on your smartphone</p>
+  <!--<p>Open <span id="testGameRoom" class="higlight"></span> on your smartphone</p>-->
   <p>bla <span id = "testAdmin"></span></p>
   <p><span id = "testAdminConsole" ></span></p>
   <ul id = "guests"></ul>
-  
+
   <div id="container">
     <div id="topDiv">
       <div class="welcomeContainerMobile">
         <p class="gameRoom"><span class="gameRoom"></span>GameRoom</p>
-        <p class="gameID"><span class="gameID"></span>gameID</p>
+        <p id="gameID"><span class="gameID"></span>gameID</p>
       </div>
     </div>
     <div id="games">
@@ -42,6 +42,7 @@
     url = url.split('/');
     idRoom = url[url.length-1];
     ws.send(JSON.stringify({action:"sendMeSessionData",idRoom:idRoom}));
+    document.getElementById("gameID").innerHTML = idRoom;
 
     ws.onmessage = function (evt)
     {
@@ -52,7 +53,7 @@
       //////////////// Loadanje game room
       if(data.type == "gameRoom")
       {
-        document.getElementById("testGameRoom").innerHTML=data.admin;
+        //document.getElementById("testGameRoom").innerHTML=data.admin;
 
         var s = "";
         for(var i = 0; i < data.clients.length; i++)
@@ -65,7 +66,16 @@
       document.getElementById("testAdmin").innerHTML=" Jaz sem admin";
 
       if(data.type == "adminCmd")
-      document.getElementById("testAdmin").innerHTML="Admin je kliknil "+data.command
+      {
+          document.getElementById("testAdmin").innerHTML="Admin je kliknil "+data.command;
+          if(data.command == "left"){
+            //TODO
+          }else if (data.command == "right") {
+            //TODO
+          }else if (data.command == "ok") {
+            //TODO
+          }
+      }
     };
   })
   </script>
