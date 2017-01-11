@@ -1,6 +1,8 @@
 html, body{
   width: 100%;
   height: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 #gameRoom{
 	font-style: normal;
@@ -8,12 +10,17 @@ html, body{
   margin: auto;
   background-color: black;
   font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-  font-size: 40px;
+  font-size: 50px;
   font-style: normal;
   font-variant: normal;
   font-weight: 400;
   line-height: 40px;
   color:#95989A;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
 }
 .higlight{
   color:#E6E6E6;
@@ -31,32 +38,51 @@ html, body{
   justify-content: center;
   align-items: center;
   height: 50%;
+  width: 800px;
+  /*background-color: pink;*/
+  background-size: 109% auto;
+  position: relative;
+  /*left:-200px;*/
+  -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+.vIzdelavi{
   background-image:url("zajecbg.jpg");
   background-repeat: no-repeat;
   background-position: center;
-  /*background-color: gray;*/
-  background-size: 109% auto;
-  /*position: relative;*/
+}
+#game2{
+  background-image: url("cureFever.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size:220%;
 }
 .game{
-  font-size:80%;
+  border: white solid 1px;
+  padding: 10px;
+  font-size:20px;
   background-color: gray;
   width: 200px;
   height: 250px;
   margin-right: 10px;
   margin-left: 10px;
-  -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
+  -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+
 }
 .gameSelected{
-  width: 250px;
-  height: 300px;
-  -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
+  padding: 13px;
+  font-size: 30px;
+  width: 260px;
+  height: 325px;
+  -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
 }
 p { display: inline }
 .gameRoom{

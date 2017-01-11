@@ -32,17 +32,18 @@
         <input placeholder="[ client3 ]">
       </div>
     </div> -->
-    <div class="topDiv">Select a game</div>
+    <div class="topDiv higlight">Select a game</div>
     <div class="gameContainer">
-        <div class="game higlight" id="game1">V izdelavi</div>
-        <div class="game higlight" id="game2">Die Curve</div>
-        <div class="game higlight" id="game3">V izdelavi</div>
+        <div class="game higlight vIzdelavi" id="game1">V izdelavi</div>
+        <div class="game higlight" id="game2"></div>
+        <div class="game higlight vIzdelavi" id="game3">V izdelavi</div>
     </div>
 </body>
 </html>
 <script>
 var games=["#game1","#game2","#game3"]
 var selectedGame=1;
+var left = $(".gameContainer").css("left");
 $(document).ready(function(){
   $(games[selectedGame]).addClass("gameSelected");
 });
@@ -54,6 +55,7 @@ $("body").keydown(function(e) {
     }
     $(".gameSelected").removeClass("gameSelected");
     $(games[selectedGame]).addClass("gameSelected");
+    // $(".gameContainer").css({left: "200px"});
   }
   else if(e.keyCode == 39) { // right
     selectedGame++;
@@ -62,6 +64,15 @@ $("body").keydown(function(e) {
     }
     $(".gameSelected").removeClass("gameSelected");
     $(games[selectedGame]).addClass("gameSelected");
+  }
+  if(selectedGame==1){
+    $(".gameContainer").css({left: "0px"});
+  }
+  else if (selectedGame==0) {
+    $(".gameContainer").css({left: "240px"});
+  }
+  else if (selectedGame==2) {
+    $(".gameContainer").css({left: "-240px"});
   }
 });
 
