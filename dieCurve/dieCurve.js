@@ -4,16 +4,16 @@
 var color = require('randomcolor')
 var Player = require('./player');
 
-function dieCurve(canvas, gameName, gameID)
+function DieCurve(canvas, gameName, gameID)
 {
     this.canvas = canvas;
     this.GameName = gameName;
     this.gameID = gameID;
-    this.players = [];
+    this.players = {};
     this.scoreBoard = [];
 }
 
-dieCurve.prototype = {
+DieCurve.prototype = {
     addPlayer: function(id,name)
     {
         player = new Player(id,random(0,360), random(0,750),random(0,750),color.randomColor(),name);
@@ -23,13 +23,17 @@ dieCurve.prototype = {
     },
     sendCmdToPlayer : function (cmd, id)
     {
+        // console.log("Players: ");
+        // console.log(this.players);
+        // console.log("Dobil smo tale ukaz: " + cmd);
+        // console.log("Dobil smo tale id: " + id);
         p = this.players[id];
         if(cmd == "hit")
             this.playerCollided(p);
         else if(cmd == "left")
             p.left();
         else
-            p.right();X
+            p.right();
     },
     getPlayers: function () {
         return this.players;
@@ -40,13 +44,18 @@ dieCurve.prototype = {
         });
     },
     updatePlayers: function() {
-        this.players.forEach(function(player){
-            player.updateCoordinates();
-            if(player.cX < 0 || player.cX > 900 ||player.cY < 0 || player.cY > 900)
-            {
-                this.playerCollided(player);
+        // console.log("Updatam vse playerje");
+        // console.log(this.players);
+        for (var key in this.players) {
+            if (this.players.hasOwnProperty(key)) {
+//                    alert("Tle not smo");
+                var player = this.players[key];
+                player.updateCoordinates();
+                if (player.cX < 0 || player.cX > 900 || player.cY < 0 || player.cY > 900) {
+                    this.playerCollided(player);
+                }
             }
-        });
+        }
     },
     playerCollided: function(player)
     {
@@ -68,16 +77,20 @@ dieCurve.prototype = {
     },
     run:function(ws)
     {
+        console.log()
+        var that = this;
+
+        // return;
         setInterval(function()
-        {
-            this.updatePlayers();
-            ws.send(JSON.stringify({"type": "gameinfo", "game": this}));
-        },50);
-
-
+            {
+                that.updatePlayers();
+                // console.log(that);
+                ws.send(JSON.stringify({"type": "gameinfo", "game": that}));
+            }
+        ,50,[ws,that]);
     }
 };
-module.exports = dieCurve;
+module.exports = DieCurve;
 
 function random(min,max)
 {

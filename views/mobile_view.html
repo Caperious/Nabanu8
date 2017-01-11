@@ -105,6 +105,10 @@
         window.location = data.url+'/'+idRoom;
         //  window.location = data.url;
       }
+      else if(data.type=="urlKontroler")
+      {
+          window.location = data.url;
+      }
       else if(data.type=="msg")
       {
         showMsg(data.msg);

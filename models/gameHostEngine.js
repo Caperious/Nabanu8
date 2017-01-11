@@ -2,11 +2,11 @@
  * Created by David on 10. 01. 2017.
  */
 
-var r_dieCurve = require('../dieCurve/dieCurve');
+var DieCurve = require('../dieCurve/dieCurve');
 
 function GameHostEngine(hostWs)
 {
-    this.game;
+    this.currentGame;
     this.hostWs = hostWs;
     this.ready = false;
     this.gameIsSelected = false;
@@ -16,8 +16,8 @@ GameHostEngine.prototype = {
     {
         // console.log("I got this gameName: " + gameName);
         if(gameName == "dieCurve") {
-            // console.log("Okej zdej bom naštimou en dieCurve");
-            this.game = new r_dieCurve('nimaveze', 'dieCurve', 1);
+            console.log("Okej zdej bom naštimou en dieCurve");
+            this.currentGame = new DieCurve('nimaveze', 'dieCurve', 1);
             this.gameIsSelected = true;
         };
         // else if pride kaki drugi spil tle not
@@ -30,7 +30,7 @@ GameHostEngine.prototype = {
     runGame : function()
     {   // vsak špil mora met napisan RUN funkcijo, v kateri se špil začne izvajat
         if(this.ready)
-            this.game.run(this.hostWs);
+            this.currentGame.run(this.hostWs);
         else
             console.log("Not all players are ready!");
     },
@@ -43,9 +43,14 @@ GameHostEngine.prototype = {
         return this.gameIsSelected;
     },
     addPlayers: function(clients){
-        clients.forEach(function(client){
-            this.game.addPlayer(client.id,client.name);
-        });
+        // console.log("========================GAME==============================");
+        // console.log(this.currentGame);
+        // console.log(clients);
+        for(var i = 0; i < clients.length; i++)
+        {
+            // console.log(clients[i]);
+            this.currentGame.addPlayer(clients[i].id,clients[i].name);
+        }
     }
 };
 

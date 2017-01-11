@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" type="text/css" href="../controlerStyle.css">
 
-  <script src="https://jsconsole.com/js/remote.js?285e407b-cb06-4eb2-a87b-da9141cd0d58"></script>
+  <script src="https://jsconsole.com/js/remote.js?8e021c8d-eb8b-42d2-9283-dd5123ca4271"></script>
 
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
   <link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.min.css">
@@ -82,16 +82,57 @@
   });
 
   var ws = new WebSocket("ws://"+ window.location.host+"/adminMobile");
-
+  var url = window.location.href;
+  url = url.split('/');
+  idRoom = url[url.length-1];
+  myID = -1;
   ws.onmessage = function (evt)
   {
+      var received_msg = evt.data;
+      data = JSON.parse(received_msg);
+      myID = data.id;
+      console.log(data);
+      if(data.type=="action")
+      {
+//          console.log("delej");
+          $('#left').unbind();
+          $('#right').unbind();
+          $('#ok').unbind();
+          $('#left').off();
+          $('#right').off();
+          $('#ok').off();
 
+        $('#right').on('touchstart', function (ev) {
+//            $("#testek").text("right");
+            timerRight = setInterval(sendRight, 50); // 250ms interval
+            return false;
+        });
+        $('#right').on('touchend', function (ev) {
+            clearInterval(timerRight);
+            return false;
+        });
+
+        $('#left').on('touchstart', function (ev) {
+//            $("#testek").text("left");
+            timerLeft = setInterval(sendLeft, 50); // 250ms interval
+            return false;
+        });
+        $('#left').on('touchend', function (ev) {
+            clearInterval(timerLeft);
+            return false;
+        });
+
+        $('#ok').on('click',function(ev)
+        {
+           ws.send(JSON.stringify({dieCurve:"true", action:"start_game", idRoom:idRoom}));
+        });
+      }
   };
 
   ws.onclose = function()
   {
     // websocket is closed.
-    document.getElementById("messages").innerHTML+="<br />Connection is closed";
+//    document.getElementById("messages").innerHTML+="<br />Connection is closed";
   };
 
   function sendCode(code,game)
@@ -100,6 +141,21 @@
     url = url.split('/');
     idRoom = url[url.length-1];
     ws.send(JSON.stringify({command:code,idRoom:idRoom,selectGame:game}));
+  }
+
+  function sendLeft()
+  {
+      console.log(ws);
+      ws.send(JSON.stringify({myID:myID, command:"left",dieCurve:"true",idRoom:idRoom}));
+      console.log("sent left");
+      console.log("my id : " + myID);
+  }
+  function sendRight()
+  {
+      console.log(ws);
+      ws.send(JSON.stringify({myID:myID, command:"right",dieCurve:"true",idRoom:idRoom}));
+      console.log("sent right");
+      console.log("my id : " + myID);
   }
   </script>
 </body>

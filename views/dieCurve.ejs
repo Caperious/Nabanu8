@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Zajc nč ne dela</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <!--<link rel="stylesheet" type="text/css" href="style.css">-->
     <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <style>
@@ -19,13 +19,18 @@
 <canvas id="game_area" width="900" height="900"></canvas>
 <script>
 
-//    var ws = new WebSocket("ws://"+window.location.host+"/server");
-//    ws.onopen = function()
-//    {
-//        // Web Socket is connected, send data using send()
-//        ws.send(JSON.stringify({"initial":"true"}));
+    var ws = new WebSocket("ws://"+window.location.host+"/dieCurveHost");
+
+    var url = window.location.href;
+    url = url.split('/');
+    idRoom = url[url.length-2];
+
+    ws.onopen = function()
+    {
+        // Web Socket is connected, send data using send()
+        ws.send(JSON.stringify({"initial":"true",command:idRoom,idRoom:idRoom}));
 //        document.getElementById("messages").innerHTML+="<br />Connected!";
-//    };
+    };
 
     ws.onmessage = function (evt)
     {
@@ -33,6 +38,7 @@
         data = JSON.parse(received_msg);
 //        console.log(data);
         var ulclients = document.getElementById("clients");
+//        console.log(data);
         if(data.refresh == "true")
         {
             var s = "";
@@ -44,18 +50,45 @@
         if(data.type=="gameinfo")
         {
 //            console.log("izpisujem gameinfo: ");
-            console.log(data.game);
-            data.game.players.forEach(function(player)
-            {
-               paint(player.cX_old,player.cY_old, player.cX, player.cY,player.color);
-            });
+//            console.log(data.game.players);
+//            data.game.players.forEach(function(player)
+//            {
+//               paint(player.cX_old,player.cY_old, player.cX, player.cY,player.color);
+//            });
+//            for(var i = 0; i<data.game.players.length; i++)
+//            {
+//                console.log("Smo tle not?");
+//                var player = data.game.players[i];
+//                paint(player.cX_old,player.cY_old, player.cX, player.cY,player.color);
+//            }
+            for (var key in data.game.players) {
+                if (data.game.players.hasOwnProperty(key)) {
+//                    alert("Tle not smo");
+                    var player = data.game.players[key];
+                    console.log(player);
+                    paint(player.cX_old,player.cY_old, player.cX, player.cY,player.color);
+                }
+
+            }
+
+//            for (var key in validation_messages) {
+//                if (validation_messages.hasOwnProperty(key)) {
+//                    var obj = validation_messages[key];
+//                    for (var prop in obj) {
+//                        if (obj.hasOwnProperty(prop)) {
+//                            alert(prop + " = " + obj[prop]);
+//                        }
+//                    }
+//                }
+//            }
         }
     };
 
     ws.onclose = function()
     {
         // websocket is closed.
-        document.getElementById("messages").innerHTML+="<br />Connection is closed";
+//        document.getElementById("messages").innerHTML+="<br />Connection is closed";
+        console.log("Websocket has closed");
     };
 
 //    function refresh()
@@ -68,15 +101,6 @@
 
 <script>
     area = $("#game_area")[0].getContext('2d');
-    function movePlayer(PlayerID, direction)
-    {}
-    function runGame()
-    {
-
-//        window.setInterval(function() {
-//            movePlayer(1,90)
-//        },500)
-    }
 
     function paint(cxo,cyo,cx,cy,color)
     {
