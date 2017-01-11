@@ -52,9 +52,9 @@ app.ws('/adminMobile', function (ws, req)
 
   ws.on('message', function (data)
   {
-    console.log(data);
+    // console.log(data);
     data = JSON.parse(data);
-    console.log(data);
+    // console.log(data);
     idRoom = data.idRoom;
     session = selectSession(idRoom);
       session.clients[0].ws = ws
@@ -179,17 +179,6 @@ app.ws('/admin', function (ws, req)
         //Če bo potrebno bomo poslali še kašken podatek
       }));
     }
-    // else if(data.action == "select")
-    // {
-    //   activeSessions[data.idRoom].gameHostEngine.selectGame(data.gameName);
-    // }
-    // else if(data.action == "start") // Ko admin pritisne play
-    // {
-    //   activeSessions[data.idRoom].gameHostEngine.ready(); // Vsi igralci so pripravljeni || admin pritisne play kr nm bol paše
-    //   if(activeSessions[data.idRoom].gameHostEngine.gameIsSelected()) { // Če je igra izbrana jo zaženemo
-    //     activeSessions[data.idRoom].gameHostEngine.runGame();
-    //   }
-    // }
   });
 });
 app.ws('/game', function (ws, req) {
@@ -198,9 +187,9 @@ app.ws('/game', function (ws, req) {
     data = JSON.parse(data); // sparsamo podatke
     if (containsCode(data.command) && data.dieCurve != "true") {
       console.log("Failed");
-      console.log(data.command);
-      console.log("Kode: ");
-      console.log(generatedCodes);
+      // console.log(data.command);
+      // console.log("Kode: ");
+      // console.log(generatedCodes);
     }
     else if(data.dieCurve == "true") // Če je igralec poslal ukaz iz dieCurve igre
     {
@@ -239,7 +228,7 @@ app.ws('/game', function (ws, req) {
             r = random(0,clientNames.length);
             client.name = clientNames[r];
 
-            console.log(client.name + " Random : " + r);
+            console.log("We have a new client: " + client.name);
             // ipList[client.id] = client.ip;
             client.ws = ws;
             // dodaj clienta v ta Game room
@@ -332,14 +321,21 @@ app.ws('/dieCurveHost', function (ws, req) {
         if(data.initial == "true")
         {
               idRoom = data.idRoom;
-              console.log(idRoom);
+              // console.log(idRoom);
               var session = selectSession(idRoom);
-              console.log(session);
+              // console.log(session);
               ws.send(JSON.stringify({zaza:"abrakadabra"}));
               session.hostWS = ws;
               session.gameHostEngine.hostWs = ws;
               // ws.send()
               console.log("Okej smo updatal ws");
+        }
+        if(data.action == "player_crashed")
+        {
+          console.log("Kurba sm se zaletu");
+          dchsession = selectSession(data.idRoom);
+          var player = dchsession.gameHostEngine.currentGame.players[data.myID];
+          dchsession.gameHostEngine.currentGame.playerCollided(player);
         }
     });
 });
