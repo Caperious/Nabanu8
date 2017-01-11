@@ -1,6 +1,8 @@
-Najprej je potrebno inštalirati node.js.
+Najprej je potrebno inï¿½talirati node.js.
 Z cmd-jem se premaknete v folder kjer je projekt
-Poeneš ukaz npm install, da ti inštalera vse kar je potrebno iz datoteke package.json
-(Opcijsko) Jst sm si inštalerou še nodemon, inštaleraš ga z npm install -g nodemon, tu je da gleda spremembe v fajlih k jih urejaš, in ti sam avtomatsko restarta server, da ti ga ni treba usakiè posebej sam na roke.
-potem pa poeneš nodemon index.js in to je to
+Poï¿½eneï¿½ ukaz npm install, da ti inï¿½talera vse kar je potrebno iz datoteke package.json
+(Opcijsko) Jst sm si inï¿½talerou ï¿½e nodemon, inï¿½taleraï¿½ ga z npm install -g nodemon, tu je da gleda spremembe v fajlih k jih urejaï¿½, in ti sam avtomatsko restarta server, da ti ga ni treba usakiï¿½ posebej sam na roke.
+potem pa poï¿½eneï¿½ nodemon index.js in to je to
 V brskalnik vnesite lokalni ip na portu 3000 (primer: 192.168.63.1:3000)
+
+ÄŒlani skupine : David Rudman, Janez Å trucelj, Vid Gabrijelj, Vid KlemenÄiÄ, Gregor Zajc
