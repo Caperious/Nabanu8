@@ -26,7 +26,6 @@ var firstClient = true;
 
 
 app.ws('/game', function (ws, req) {
-<<<<<<< b54049a67f683f757a5780f927180df00ba070ea
     ws.on('message', function (data) { // ko dobimo porocilo
 
         data = JSON.parse(data); // sparsamo podatke
@@ -95,8 +94,6 @@ app.ws('/game', function (ws, req) {
                 }
             }
         }
-=======
->>>>>>> 93e00d1f3b1b5e92c47b71731d9b99bb3f281da7
 
       ws.on('message', function (data) { // ko dobimo porocilo
           data = JSON.parse(data); // sparsamo podatke
@@ -180,6 +177,7 @@ app.ws('/game', function (ws, req) {
               }
           }*/
       });
+    });
 });
 
 app.ws('/server', function (ws, req)
@@ -307,8 +305,6 @@ function containsCode(code) {
     }
     return false;
 }
-<<<<<<< b54049a67f683f757a5780f927180df00ba070ea
-=======
 
 function selectSession(gameID)
 {
@@ -319,4 +315,3 @@ function selectSession(gameID)
       return activeSessions[i];
   }
 }
->>>>>>> 93e00d1f3b1b5e92c47b71731d9b99bb3f281da7
