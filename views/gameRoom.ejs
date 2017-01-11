@@ -84,7 +84,11 @@ $("body").keydown(function(e) {
       document.getElementById("testAdmin").innerHTML=" Jaz sem admin";
 
       if(data.type == "adminCmd")
-      document.getElementById("testAdmin").innerHTML="Admin je kliknil "+data.command
+      document.getElementById("testAdmin").innerHTML="Admin je kliknil "+data.command;
+      if(data.type=="url")
+      {
+          window.location = data.url;
+      }
     };
   })
   </script>
