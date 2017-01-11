@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="HandheldFriendly" content="true" />
     <link rel="stylesheet" type="text/css" href="../controlerStyle.css">
-    <script src="https://jsconsole.com/js/remote.js?b51eb34a-9320-47ff-a01b-bde31232da88"></script>
+    <script src="https://jsconsole.com/js/remote.js?7baa37d1-65f8-46be-9df6-2a1d567ac875"></script>
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
@@ -60,12 +60,15 @@
 
 
     var ws = new WebSocket("ws://"+ window.location.host+"/game"); //ip
-    myID = -1;
+    var myID = -1;
+    var url = window.location.href;
+    url = url.split('/');
+    idRoom = url[url.length-1];
     console.log("my id : " + myID);
     ws.onopen = function()
     {
         // Web Socket is connected, send data using send()
-        ws.send(JSON.stringify({"initial":"true"}));
+        ws.send(JSON.stringify({"command":idRoom}));
         document.getElementById("messages").innerHTML+="<br />Connected!";
     };
 
@@ -75,9 +78,9 @@
         data = JSON.parse(received_msg);
         console.log("data:");
         console.log(data);
-        myID = data.id;
+        myID = data.myID;
         //console.log(id);
-        document.getElementById("messages").innerHTML+="<br />Recived message: " + received_msg;
+//        document.getElementById("messages").innerHTML+="<br />Recived message: " + received_msg;
     };
 
     ws.onclose = function()
@@ -93,19 +96,19 @@
     }
     function sendLeft()
     {
-        ws.send(JSON.stringify({myID:myID, command:"left"}));
+        ws.send(JSON.stringify({myID:myID,dieCurve:"true", cmd:"left",idRoom:idRoom}));
         console.log("sent left");
         console.log("my id : " + myID);
     }
     function sendRight()
     {
-        ws.send(JSON.stringify({myID:myID, command:"right"}));
+        ws.send(JSON.stringify({myID:myID,dieCurve:"true", cmd:"right",idRoom:idRoom}));
         console.log("sent right");
         console.log("my id : " + myID);
     }
 
     $('#right').on('touchstart', function (ev) {
-        $("#testek").text("right");
+//        $("#testek").text("right");
         timerRight = setInterval(sendRight, 50); // 250ms interval
         return false;
     });
@@ -115,7 +118,7 @@
     });
 
     $('#left').on('touchstart', function (ev) {
-        $("#testek").text("left");
+//        $("#testek").text("left");
         timerLeft = setInterval(sendLeft, 50); // 250ms interval
         return false;
     });

@@ -33,6 +33,7 @@ Player.prototype= {
         this.cY_old = this.cY;
         this.cX = this.cX + Math.cos(this.direction * Math.PI / 180) * 3;
         this.cY = this.cY + Math.sin(this.direction * Math.PI / 180) * 3;
+        // console.log(this.cX)
     }
 
 }
