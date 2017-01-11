@@ -32,49 +32,26 @@
         <input placeholder="[ client3 ]">
       </div>
     </div> -->
+    <p class="higlight" id="code">roomID</p>
+    <div class="playerContainer1">
+      <span id="testGameRoom" lass="higlight"></span>
+      <ul id = "guests"></ul>
+    </div>
     <div class="topDiv higlight">Select a game</div>
     <div class="gameContainer">
         <div class="game higlight vIzdelavi" id="game1">V izdelavi</div>
         <div class="game higlight" id="game2"></div>
         <div class="game higlight vIzdelavi" id="game3">V izdelavi</div>
     </div>
+
+
 </body>
 </html>
 <script>
   $(document).ready(function(){
-    // var games=["#game1","#game2","#game3"]
-    // var selectedGame=1;
-    // var left = $(".gameContainer").css("left");
-    // $(games[selectedGame]).addClass("gameSelected");
-    // $(".gameContainer").css({left: "1px"});
-    // $("body").keydown(function(e) {
-    //   if(e.keyCode == 37) { // left
-    //     selectedGame--;
-    //     if(selectedGame<0){
-    //       selectedGame=games.length-1;
-    //     }
-    //     $(".gameSelected").removeClass("gameSelected");
-    //     $(games[selectedGame]).addClass("gameSelected");
-    //     // $(".gameContainer").css({left: "200px"});
-    //   }
-    //   else if(e.keyCode == 39) { // right
-    //     selectedGame++;
-    //     if(selectedGame>games.length-1){
-    //       selectedGame=0;
-    //     }
-    //     $(".gameSelected").removeClass("gameSelected");
-    //     $(games[selectedGame]).addClass("gameSelected");
-    //   }
-    //   if(selectedGame==1){
-    //     $(".gameContainer").css({left: "0px"});
-    //   }
-    //   else if (selectedGame==0) {
-    //     $(".gameContainer").css({left: "240px"});
-    //   }
-    //   else if (selectedGame==2) {
-    //     $(".gameContainer").css({left: "-240px"});
-    //   }
-    // });
+      var url = window.location.href;
+        url = url.split('/');
+    	$("#code").text(url[url.length-1]);
   });
 
   //var ws = new WebSocket("ws://"+window.location.host+"/server");
@@ -97,8 +74,6 @@
       //////////////// Loadanje game room
       if(data.type == "gameRoom")
       {
-        document.getElementById("testGameRoom").innerHTML=data.admin;
-
         var s = "";
         for(var i = 0; i < data.clients.length; i++)
         {
@@ -139,10 +114,11 @@
   var games=["#game1","#game2","#game3"]
   var selectedGame=1;
   var left = $(".gameContainer").css("left");
+  $(games[selectedGame]).addClass("gameSelected");
+  $(".gameContainer").css({left: "1px"});
 function sendPremik(move)
   {
-    $(games[selectedGame]).addClass("gameSelected");
-    $(".gameContainer").css({left: "1px"});
+
     if(move == "levo")
     {
       selectedGame--;
