@@ -22,6 +22,32 @@ html, body{
   align-items: center;
 
 }
+
+li{
+  /*float: left;*/
+  margin: 0;
+  padding: 0;
+  margin-top: 3px;
+  line-height: 20px;
+}
+#guests{
+  /*color: red;*/
+  list-style: none
+}
+#code{
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 0;
+  font-size: 30px;
+}
+.playerContainer1{
+  position: absolute;
+  top: 30px;
+  left: -40px;
+  /*background-color: pink;*/
+  font-size:20px;
+}
 .higlight{
   color:#E6E6E6;
 }
