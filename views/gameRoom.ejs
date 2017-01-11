@@ -1,30 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>GameRoom</title>
-    <link rel="stylesheet" type="text/css" href="gameroom.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <meta charset="UTF-8">
+  <title>GameRoom</title>
+  <link rel="stylesheet" type="text/css" href="gameroom.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
-  <body id="gameRoom">
-    <p>Open <span id="testGameRoom" class="higlight"></span> on your smartphone</p>
-    <p>bla <span id = "testAdmin"></span></p>
-    <ul id = "guests"></ul>
-
-
-
-
-
-    <div id="container">
-      <div id="topDiv">
-        <div class="welcomeContainerMobile">
-          <p class="gameRoom"><span class="gameRoom"></span>GameRoom</p>
-          <p class="gameID"><span class="gameID"></span>gameID</p>
-        </div>
+<body id="gameRoom">
+  <p>Open <span id="testGameRoom" class="higlight"></span> on your smartphone</p>
+  <p>bla <span id = "testAdmin"></span></p>
+  <p><span id = "testAdminConsole" ></span></p>
+  <ul id = "guests"></ul>
+  
+  <div id="container">
+    <div id="topDiv">
+      <div class="welcomeContainerMobile">
+        <p class="gameRoom"><span class="gameRoom"></span>GameRoom</p>
+        <p class="gameID"><span class="gameID"></span>gameID</p>
       </div>
-      <div id="games">
-        <button class="gameOne" disabled="false">GAME ONE</button>
-        <button class="gameTwo" disabled="false">GAME TWO</button>
+    </div>
+    <div id="games">
+      <button class="gameOne" disabled="false">GAME ONE</button>
+      <button class="gameTwo" disabled="false">GAME TWO</button>
       <div id="clients">
         <input placeholder="[ admin ]">
         <input placeholder="[ client1 ]">
@@ -33,43 +30,42 @@
       </div>
     </div>
   </body>
-</html>
+  </html>
+  <script>
+  //var ws = new WebSocket("ws://"+window.location.host+"/server");
+  var ws = new WebSocket("ws://"+window.location.host+"/admin");
+  var idRoom = -1;
 
+  $(function()
+  {
+    var url = window.location.href;
+    url = url.split('/');
+    idRoom = url[url.length-1];
+    ws.send(JSON.stringify({action:"sendMeSessionData",idRoom:idRoom}));
 
-<script>
-var ws = new WebSocket("ws://"+window.location.host+"/server");
-var idRoom = -1;
+    ws.onmessage = function (evt)
+    {
+      var received_msg = evt.data;
+      data = JSON.parse(received_msg);
+      var ulclients = document.getElementById("guests");
 
-$(function()
-{
-
-  var url = window.location.href;
-  url = url.split('/');
-  idRoom = url[url.length-1];
-  ws.send(JSON.stringify({action:"sendMeSessionData",idRoom:idRoom}));
-
-  ws.onmessage = function (evt)
+      //////////////// Loadanje game room
+      if(data.type == "gameRoom")
       {
-          var received_msg = evt.data;
-          data = JSON.parse(received_msg);
-          var ulclients = document.getElementById("guests");
+        document.getElementById("testGameRoom").innerHTML=data.admin;
 
-          if(data.type == "gameRoom")
-          {
-              document.getElementById("testGameRoom").innerHTML=data.admin;
+        var s = "";
+        for(var i = 0; i < data.clients.length; i++)
+        {
+          s+="<li>"+data.clients[i]+"</li>";
+        }
+        ulclients.innerHTML=s;
+      }
+      if(data.isThisHostAdmin == "true")
+      document.getElementById("testAdmin").innerHTML=" Jaz sem admin";
 
-              var s = "";
-              for(var i = 0; i < data.clients.length; i++)
-              {
-                  s+="<li>"+data.clients[i]+"</li>";
-              }
-              ulclients.innerHTML=s;
-          }
-          if(data.isThisHostAdmin == "true")
-            document.getElementById("testAdmin").innerHTML=" Jaz sem admin";
-      };
-
-
-})
-
-</script>
+      if(data.type == "adminCmd")
+      document.getElementById("testAdmin").innerHTML="Admin je kliknil "+data.command
+    };
+  })
+  </script>
