@@ -1,7 +1,7 @@
 /**
  * Created by David on 14. 12. 2016.
  */
-function Player(id, direction,cX, cY, color)
+function Player(id, direction,cX, cY, color,name)
 {
     this.id = id;
     this.direction = direction;
@@ -12,7 +12,7 @@ function Player(id, direction,cX, cY, color)
     this.color = color;
     this.playing = false;
     this.score = 0;
-    this.name = "Player "+this.id;
+    this.name = name;
     this.ready = false;
 }
 

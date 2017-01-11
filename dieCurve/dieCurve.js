@@ -14,10 +14,11 @@ function dieCurve(canvas, gameName, gameID)
 }
 
 dieCurve.prototype = {
-    addPlayer: function(id)
+    addPlayer: function(id,name)
     {
-        player = new Player(id,random(0,360), random(0,750),random(0,750),color.randomColor());
-        this.players[id] = player;
+        player = new Player(id,random(0,360), random(0,750),random(0,750),color.randomColor(),name);
+        if(typeof this.players[id] == 'undefined')
+            this.players[id] = player;
 
     },
     sendCmdToPlayer : function (cmd, id)
@@ -28,7 +29,7 @@ dieCurve.prototype = {
         else if(cmd == "left")
             p.left();
         else
-            p.right();
+            p.right();X
     },
     getPlayers: function () {
         return this.players;
