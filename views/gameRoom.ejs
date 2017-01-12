@@ -9,32 +9,9 @@
 </head>
 <body id="gameRoom">
 
-  <!-- <p>Open <span id="testGameRoom" lass="higlight"></span> on your smartphone</p>
-  <p>bla <span id = "testAdmin"></span></p>
-
-  <p><span id = "testAdminConsole" ></span></p>
-  <ul id = "guests"></ul>
-
-  <div id="container">
-    <div id="topDiv">
-      <div class="welcomeContainerMobile">
-        <p class="gameRoom"><span class="gameRoom"></span>GameRoom</p>
-        <p class="gameID"><span class="gameID"></span>gameID</p>
-      </div>
-    </div>
-    <div id="games">
-      <button class="gameOne" disabled="false">GAME ONE</button>
-      <button class="gameTwo" disabled="false">GAME TWO</button>
-      <div id="clients">
-        <input placeholder="[ admin ]">
-        <input placeholder="[ client1 ]">
-        <input placeholder="[ client2 ]">
-        <input placeholder="[ client3 ]">
-      </div>
-      </div> -->
     <p class="higlight" id="code">roomID</p>
     <div class="playerContainer1">
-      <span id="testGameRoom" lass="higlight"></span>
+      <span id="testGameRoom" class="higlight"></span>
       <ul id = "guests"></ul>
     </div>
     <div class="topDiv higlight">Select a game</div>
@@ -47,39 +24,45 @@
 </html>
 <script>
   $(document).ready(function(){
-    var games=["#game1","#game2","#game3"]
-    var selectedGame=1;
-    var left = $(".gameContainer").css("left");
-    $(games[selectedGame]).addClass("gameSelected");
-    $(".gameContainer").css({left: "1px"});
-    $("body").keydown(function(e) {
-      if(e.keyCode == 37) { // left
-        selectedGame--;
-        if(selectedGame<0){
-          selectedGame=games.length-1;
-        }
-        $(".gameSelected").removeClass("gameSelected");
-        $(games[selectedGame]).addClass("gameSelected");
-        // $(".gameContainer").css({left: "200px"});
-      }
-      else if(e.keyCode == 39) { // right
-        selectedGame++;
-        if(selectedGame>games.length-1){
-          selectedGame=0;
-        }
-        $(".gameSelected").removeClass("gameSelected");
-        $(games[selectedGame]).addClass("gameSelected");
-      }
-      if(selectedGame==1){
-        $(".gameContainer").css({left: "0px"});
-      }
-      else if (selectedGame==0) {
-        $(".gameContainer").css({left: "240px"});
-      }
-      else if (selectedGame==2) {
-        $(".gameContainer").css({left: "-240px"});
-      }
-    });
+
+
+
+
+
+
+
+    var url = window.location.href;
+    url = url.split('/');
+    $("#code").text(url[url.length-1]);
+
+    // $("body").keydown(function(e) {
+    //   if(e.keyCode == 37) { // left
+    //     selectedGame--;
+    //     if(selectedGame<0){
+    //       selectedGame=games.length-1;
+    //     }
+    //     $(".gameSelected").removeClass("gameSelected");
+    //     $(games[selectedGame]).addClass("gameSelected");
+    //     // $(".gameContainer").css({left: "200px"});
+    //   }
+    //   else if(e.keyCode == 39) { // right
+    //     selectedGame++;
+    //     if(selectedGame>games.length-1){
+    //       selectedGame=0;
+    //     }
+    //     $(".gameSelected").removeClass("gameSelected");
+    //     $(games[selectedGame]).addClass("gameSelected");
+    //   }
+    //   if(selectedGame==1){
+    //     $(".gameContainer").css({left: "0px"});
+    //   }
+    //   else if (selectedGame==0) {
+    //     $(".gameContainer").css({left: "240px"});
+    //   }
+    //   else if (selectedGame==2) {
+    //     $(".gameContainer").css({left: "-240px"});
+    //   }
+    // });
   });
 
   //var ws = new WebSocket("ws://"+window.location.host+"/server");
@@ -102,7 +85,7 @@
       //////////////// Loadanje game room
       if(data.type == "gameRoom")
       {
-        document.getElementById("testGameRoom").innerHTML=data.admin;
+        // document.getElementById("testGameRoom").innerHTML=data.admin;
 
         var s = "";
         for(var i = 0; i < data.clients.length; i++)
@@ -111,15 +94,56 @@
         }
         ulclients.innerHTML=s;
       }
-      if(data.isThisHostAdmin == "true")
-      document.getElementById("testAdmin").innerHTML=" Jaz sem admin";
+      // if(data.isThisHostAdmin == "true")
+      // document.getElementById("testAdmin").innerHTML=" Jaz sem admin";
 
-      if(data.type == "adminCmd")
-      document.getElementById("testAdmin").innerHTML="Admin je kliknil "+data.command;
+      // if(data.type == "adminCmd")
+      // document.getElementById("testAdmin").innerHTML="Admin je kliknil "+data.command;
+      if(data.type == "adminCmd"){
+        sendPremik(data.command);
+      }
       if(data.type=="url")
       {
           window.location = data.url;
       }
     };
   })
+  var games=["#game1","#game2","#game3"]
+  var selectedGame=1;
+  var left = $(".gameContainer").css("left");
+  $(games[selectedGame]).addClass("gameSelected");
+  $(".gameContainer").css({left: "1px"});
+  function sendPremik(move){
+    // console.log("lalalalal");
+    if(move == "levo")
+    {
+      $(games[selectedGame]).addClass("gameSelected");
+      $(".gameContainer").css({left: "1px"});
+      selectedGame--;
+      if(selectedGame<0){
+        selectedGame=games.length-1;
+      }
+      $(".gameSelected").removeClass("gameSelected");
+      $(games[selectedGame]).addClass("gameSelected");
+    }
+    if(move == "desno")
+    {
+      selectedGame++;
+      if(selectedGame>games.length-1){
+        selectedGame=0;
+      }
+      $(".gameSelected").removeClass("gameSelected");
+      $(games[selectedGame]).addClass("gameSelected");
+    }
+    if(selectedGame==1){
+      $(".gameContainer").css({left: "0px"});
+    }
+    else if (selectedGame==0) {
+      $(".gameContainer").css({left: "240px"});
+    }
+    else if (selectedGame==2) {
+      $(".gameContainer").css({left: "-240px"});
+    }
+  }
+
   </script>
